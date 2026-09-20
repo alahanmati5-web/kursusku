@@ -36,7 +36,7 @@ $kursus = getKursus();
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: rgba(15, 23, 42, 0.96);
+            background: rgba(15, 23, 42, 0.97);
             padding: 15px 7%;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
@@ -171,10 +171,6 @@ $kursus = getKursus();
             background: rgba(255,255,255,0.12);
         }
 
-        .hero-image {
-            position: relative;
-        }
-
         .hero-image img {
             width: 100%;
             height: 350px;
@@ -182,6 +178,129 @@ $kursus = getKursus();
             border-radius: 25px;
             box-shadow: 0 25px 60px rgba(0,0,0,0.35);
             border: 5px solid rgba(255,255,255,0.15);
+        }
+
+        /* ================= BELAJAR BERSAMA ================= */
+
+        .belajar-section {
+            max-width: 1200px;
+            width: 86%;
+            margin: 80px auto;
+            padding: 45px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 12px 35px rgba(15,23,42,0.08);
+        }
+
+        .belajar-image {
+            position: relative;
+        }
+
+        .belajar-image img {
+            width: 100%;
+            height: 350px;
+            display: block;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+
+        .image-badge {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+
+            background: rgba(15, 23, 42, 0.92);
+            color: white;
+
+            padding: 12px 18px;
+            border-radius: 12px;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        }
+
+        .belajar-content .small-title {
+            display: inline-block;
+            color: #2563eb;
+            background: #eff6ff;
+
+            padding: 7px 13px;
+            border-radius: 20px;
+
+            font-size: 13px;
+            font-weight: bold;
+
+            margin-bottom: 15px;
+        }
+
+        .belajar-content h2 {
+            font-size: 38px;
+            color: #0f172a;
+            line-height: 1.2;
+            margin-bottom: 18px;
+        }
+
+        .belajar-content h2 span {
+            color: #2563eb;
+        }
+
+        .belajar-content p {
+            color: #64748b;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        /* ================= BENEFITS ================= */
+
+        .benefits {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .benefit {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            padding: 12px;
+
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+
+            color: #334155;
+            font-size: 14px;
+            font-weight: bold;
+
+            transition: 0.3s;
+        }
+
+        .benefit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(15,23,42,0.08);
+        }
+
+        .benefit-icon {
+            width: 35px;
+            height: 35px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #dbeafe;
+            border-radius: 9px;
+
+            flex-shrink: 0;
         }
 
         /* ================= KATALOG ================= */
@@ -217,9 +336,12 @@ $kursus = getKursus();
         .course-card {
             background: white;
             padding: 25px;
+
             border-radius: 18px;
             border: 1px solid #e2e8f0;
+
             box-shadow: 0 8px 25px rgba(15,23,42,0.06);
+
             transition: 0.3s;
         }
 
@@ -231,23 +353,30 @@ $kursus = getKursus();
         .course-icon {
             width: 55px;
             height: 55px;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             background: #eff6ff;
             border-radius: 14px;
+
             font-size: 27px;
             margin-bottom: 18px;
         }
 
         .category {
             display: inline-block;
+
             color: #2563eb;
             background: #eff6ff;
+
             padding: 6px 10px;
             border-radius: 20px;
+
             font-size: 12px;
             font-weight: bold;
+
             margin-bottom: 12px;
         }
 
@@ -272,8 +401,10 @@ $kursus = getKursus();
 
         .status {
             display: inline-block;
+
             padding: 7px 13px;
             border-radius: 20px;
+
             font-size: 12px;
             font-weight: bold;
         }
@@ -291,14 +422,19 @@ $kursus = getKursus();
         .capacity {
             height: 8px;
             background: #e2e8f0;
+
             border-radius: 20px;
             overflow: hidden;
+
             margin-top: 17px;
         }
 
         .capacity-bar {
             height: 100%;
-            background: linear-gradient(90deg, #2563eb, #7c3aed);
+
+            background:
+                linear-gradient(90deg, #2563eb, #7c3aed);
+
             border-radius: 20px;
         }
 
@@ -306,10 +442,14 @@ $kursus = getKursus();
 
         .media {
             margin-top: 70px;
+
             background: white;
             padding: 40px;
+
             border-radius: 20px;
+
             text-align: center;
+
             box-shadow: 0 8px 25px rgba(15,23,42,0.06);
         }
 
@@ -335,8 +475,11 @@ $kursus = getKursus();
         footer {
             background: #0f172a;
             color: #cbd5e1;
+
             text-align: center;
+
             padding: 30px;
+
             margin-top: 80px;
         }
 
@@ -360,6 +503,10 @@ $kursus = getKursus();
 
             .hero-buttons {
                 justify-content: center;
+            }
+
+            .belajar-section {
+                grid-template-columns: 1fr;
             }
 
             .course-grid {
@@ -408,6 +555,24 @@ $kursus = getKursus();
                 height: 220px;
             }
 
+            .belajar-section {
+                width: 90%;
+                padding: 25px;
+                margin: 50px auto;
+            }
+
+            .belajar-image img {
+                height: 230px;
+            }
+
+            .belajar-content h2 {
+                font-size: 30px;
+            }
+
+            .benefits {
+                grid-template-columns: 1fr;
+            }
+
             .container {
                 width: 90%;
                 margin: 50px auto;
@@ -438,20 +603,38 @@ $kursus = getKursus();
 <!-- ================= HEADER ================= -->
 
 <header>
+
     <nav>
 
         <div class="logo">
-            <img src="assets/images/logo-kursus.png" alt="Logo KursusKu">
+
+            <img
+                src="assets/images/logo-kursus.png"
+                alt="Logo KursusKu"
+            >
+
             <span>KursusKu</span>
+
         </div>
 
         <div class="nav-links">
-            <a href="index.php" class="active">Katalog</a>
-            <a href="fee-calculator.php">Kalkulator</a>
-            <a href="server-time.php">Server Time</a>
+
+            <a href="index.php" class="active">
+                Katalog
+            </a>
+
+            <a href="fee-calculator.php">
+                Kalkulator
+            </a>
+
+            <a href="server-time.php">
+                Server Time
+            </a>
+
         </div>
 
     </nav>
+
 </header>
 
 
@@ -480,11 +663,17 @@ $kursus = getKursus();
 
             <div class="hero-buttons">
 
-                <a href="#kursus" class="btn btn-primary">
+                <a
+                    href="#kursus"
+                    class="btn btn-primary"
+                >
                     📚 Lihat Kursus
                 </a>
 
-                <a href="fee-calculator.php" class="btn btn-secondary">
+                <a
+                    href="fee-calculator.php"
+                    class="btn btn-secondary"
+                >
                     🧮 Hitung Biaya
                 </a>
 
@@ -492,10 +681,11 @@ $kursus = getKursus();
 
         </div>
 
+
         <div class="hero-image">
 
             <img
-                src="assets/images/hero-kursus.jpg"
+                src="assets/images/hero-kursus.png"
                 alt="Belajar bersama KursusKu"
             >
 
@@ -506,13 +696,107 @@ $kursus = getKursus();
 </section>
 
 
+<!-- ================= BELAJAR BERSAMA ================= -->
+
+<section class="belajar-section">
+
+    <div class="belajar-image">
+
+        <img
+            src="assets/images/hero-kursus.png"
+            alt="Belajar Bersama KursusKu"
+        >
+
+        <div class="image-badge">
+            🎓 Belajar Bersama KursusKu
+        </div>
+
+    </div>
+
+
+    <div class="belajar-content">
+
+        <div class="small-title">
+            ✨ Pengalaman Belajar
+        </div>
+
+        <h2>
+            Belajar Bersama
+            <span>KursusKu</span>
+        </h2>
+
+        <p>
+            KursusKu hadir untuk membantu kamu mengembangkan
+            kemampuan dan mempelajari skill baru. Pilih kursus
+            yang sesuai dengan minatmu dan mulai perjalanan
+            belajar untuk membangun masa depan yang lebih baik.
+        </p>
+
+
+        <div class="benefits">
+
+            <div class="benefit">
+
+                <div class="benefit-icon">
+                    📚
+                </div>
+
+                Materi Beragam
+
+            </div>
+
+
+            <div class="benefit">
+
+                <div class="benefit-icon">
+                    💻
+                </div>
+
+                Belajar Teknologi
+
+            </div>
+
+
+            <div class="benefit">
+
+                <div class="benefit-icon">
+                    🎯
+                </div>
+
+                Sesuai Tujuan
+
+            </div>
+
+
+            <div class="benefit">
+
+                <div class="benefit-icon">
+                    🚀
+                </div>
+
+                Tingkatkan Skill
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
 <!-- ================= KATALOG ================= -->
 
-<main class="container" id="kursus">
+<main
+    class="container"
+    id="kursus"
+>
 
     <div class="section-title">
 
-        <h2>Katalog Kursus</h2>
+        <h2>
+            Katalog Kursus
+        </h2>
 
         <p>
             Pilih kursus yang sesuai dengan kebutuhan dan tujuanmu.
@@ -541,40 +825,72 @@ $kursus = getKursus();
 
             ?>
 
+
             <div class="course-card">
 
                 <div class="course-icon">
                     🎓
                 </div>
 
+
                 <div class="category">
-                    <?= htmlspecialchars($item['kategori']); ?>
+
+                    <?= htmlspecialchars(
+                        $item['kategori']
+                    ); ?>
+
                 </div>
+
 
                 <h3>
-                    <?= htmlspecialchars($item['nama']); ?>
+
+                    <?= htmlspecialchars(
+                        $item['nama']
+                    ); ?>
+
                 </h3>
 
+
                 <div class="price">
-                    <?= formatRupiah($item['harga']); ?>
+
+                    <?= formatRupiah(
+                        $item['harga']
+                    ); ?>
+
                 </div>
+
 
                 <div class="info">
-                    👥 <?= $item['peserta']; ?>
+
+                    👥
+                    <?= $item['peserta']; ?>
+
                     peserta dari
+
                     <?= $item['kapasitas']; ?>
+
                     kapasitas
+
                 </div>
 
-                <span class="status <?= $statusClass; ?>">
+
+                <span
+                    class="status <?= $statusClass; ?>"
+                >
+
                     <?= $status; ?>
+
                 </span>
+
 
                 <div class="capacity">
 
                     <div
                         class="capacity-bar"
-                        style="width: <?= min($persentase, 100); ?>%;"
+                        style="width: <?= min(
+                            $persentase,
+                            100
+                        ); ?>%;"
                     ></div>
 
                 </div>
@@ -590,12 +906,15 @@ $kursus = getKursus();
 
     <section class="media">
 
-        <h2>🎬 Kenali KursusKu</h2>
+        <h2>
+            🎬 Kenali KursusKu
+        </h2>
 
         <p>
             Lihat video perkenalan dan kenali pengalaman belajar
             yang tersedia di KursusKu.
         </p>
+
 
         <video controls>
 
@@ -618,9 +937,15 @@ $kursus = getKursus();
 <footer>
 
     <p>
-        &copy; <?= date('Y'); ?>
+
+        &copy;
+        <?= date('Y'); ?>
+
         <strong>KursusKu</strong>.
-        Belajar Skill Baru, Bangun Masa Depan.
+
+        Belajar Skill Baru,
+        Bangun Masa Depan.
+
     </p>
 
 </footer>
