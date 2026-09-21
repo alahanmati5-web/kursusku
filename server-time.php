@@ -8,348 +8,282 @@ $serverDate = date('d F Y');
 
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Server Time - KursusKu</title>
+    <title>KursusKu | Server Time</title>
 
     <style>
-
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
             font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            color: #1e293b;
+            background: #07110d;
+            color: #eafff1;
+            min-height: 100vh;
         }
 
-        /* ================= HEADER ================= */
-
-        header {
-            background: #0f172a;
-            padding: 15px 7%;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-        }
-
-        nav {
-            max-width: 1200px;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: white;
-            font-size: 25px;
-            font-weight: bold;
-        }
-
-        .logo img {
-            width: 48px;
-            height: 48px;
-            object-fit: contain;
-            background: white;
-            border-radius: 50%;
-            padding: 3px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 8px;
-        }
-
-        .nav-links a {
-            color: #cbd5e1;
+        a {
             text-decoration: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            transition: 0.3s;
+            color: inherit;
         }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            background: #2563eb;
-            color: white;
-        }
-
-        /* ================= HERO ================= */
-
-        .page-hero {
-            background:
-                linear-gradient(135deg, #0f172a, #1d4ed8, #7c3aed);
-            color: white;
-            text-align: center;
-            padding: 70px 20px;
-        }
-
-        .page-hero .icon {
-            font-size: 45px;
-            margin-bottom: 15px;
-        }
-
-        .page-hero h1 {
-            font-size: 42px;
-            margin-bottom: 12px;
-        }
-
-        .page-hero p {
-            color: #dbeafe;
-            font-size: 17px;
-        }
-
-        /* ================= CLOCK ================= */
 
         .container {
             width: 90%;
-            max-width: 850px;
-            margin: 60px auto;
+            max-width: 1050px;
+            margin: auto;
+        }
+
+        header {
+            background: #020807;
+            border-bottom: 1px solid #174d2d;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav {
+            min-height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #39ff88;
+            text-shadow: 0 0 12px rgba(57,255,136,.5);
+        }
+
+        .logo span,
+        footer span {
+            color: #eafff1;
+        }
+
+        nav {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #91a59a;
+            padding: 9px 14px;
+            border-radius: 8px;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #39ff88;
+            background: #0d2116;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 70px 0 40px;
+            background:
+                linear-gradient(135deg, #020807, #062315, #07110d);
+        }
+
+        .terminal {
+            display: inline-block;
+            font-family: monospace;
+            color: #39ff88;
+            border: 1px solid #1d6b3c;
+            background: #0a1b11;
+            padding: 8px 14px;
+            border-radius: 30px;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            font-size: clamp(34px, 5vw, 52px);
+            margin-bottom: 12px;
+        }
+
+        h1 span {
+            color: #39ff88;
+            text-shadow: 0 0 18px rgba(57,255,136,.3);
+        }
+
+        .hero p {
+            color: #91a59a;
+        }
+
+        main {
+            padding: 20px 0 80px;
         }
 
         .clock-card {
-            background: white;
-            border-radius: 22px;
-            padding: 45px 30px;
+            max-width: 700px;
+            margin: 20px auto 30px;
+            padding: 45px 25px;
             text-align: center;
-            box-shadow: 0 12px 35px rgba(15,23,42,0.08);
-            border: 1px solid #e2e8f0;
+            background: #0a1710;
+            border: 1px solid #1e6b3d;
+            border-radius: 18px;
+            box-shadow: 0 0 40px rgba(57,255,136,.08);
         }
 
-        .clock-icon {
-            font-size: 55px;
-            margin-bottom: 20px;
-        }
-
-        .clock-card h2 {
-            color: #64748b;
-            font-size: 18px;
+        .clock-label {
+            font-family: monospace;
+            color: #39ff88;
             margin-bottom: 15px;
         }
 
-        .time {
-            font-size: 64px;
+        #clock {
+            font-family: monospace;
+            font-size: clamp(48px, 10vw, 90px);
             font-weight: bold;
-            color: #2563eb;
-            letter-spacing: 3px;
-            margin-bottom: 10px;
+            color: #39ff88;
+            text-shadow:
+                0 0 10px rgba(57,255,136,.5),
+                0 0 30px rgba(57,255,136,.25);
+            letter-spacing: 4px;
         }
 
-        .date {
-            font-size: 20px;
-            color: #475569;
-            margin-bottom: 35px;
+        #date {
+            margin-top: 12px;
+            color: #9db2a5;
+            font-size: 18px;
         }
 
         .timezone {
             display: inline-block;
-            background: #eff6ff;
-            color: #1d4ed8;
-            padding: 10px 18px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 14px;
+            margin-top: 20px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            color: #39ff88;
+            background: #0d2b18;
+            border: 1px solid #276d42;
+            font-family: monospace;
         }
-
-        /* ================= INFO ================= */
 
         .info-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
-            margin-top: 25px;
+            max-width: 900px;
+            margin: auto;
         }
 
         .info-card {
-            background: white;
-            padding: 25px 20px;
-            border-radius: 15px;
+            padding: 24px;
+            background: #0a1710;
+            border: 1px solid #173d27;
+            border-radius: 14px;
             text-align: center;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 8px 25px rgba(15,23,42,0.05);
+            transition: .3s;
         }
 
-        .info-card .icon {
+        .info-card:hover {
+            border-color: #39ff88;
+            transform: translateY(-4px);
+            box-shadow: 0 0 20px rgba(57,255,136,.08);
+        }
+
+        .info-icon {
             font-size: 30px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .info-card h3 {
-            font-size: 16px;
             margin-bottom: 7px;
-            color: #0f172a;
         }
 
         .info-card p {
+            color: #91a59a;
             font-size: 14px;
-            color: #64748b;
         }
 
-        /* ================= FOOTER ================= */
+        .status {
+            color: #39ff88 !important;
+        }
 
         footer {
-            margin-top: 80px;
-            padding: 30px;
-            background: #0f172a;
-            color: #cbd5e1;
+            border-top: 1px solid #173d27;
+            background: #020807;
             text-align: center;
+            padding: 25px;
+            color: #72847a;
         }
 
-        footer strong {
-            color: white;
+        footer span {
+            color: #39ff88;
         }
-
-        /* ================= RESPONSIVE ================= */
 
         @media (max-width: 700px) {
-
-            header {
-                padding: 12px 5%;
-            }
-
-            nav {
+            .nav {
                 flex-direction: column;
-                gap: 12px;
-            }
-
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .nav-links a {
-                padding: 8px 10px;
-                font-size: 13px;
-            }
-
-            .page-hero {
-                padding: 55px 20px;
-            }
-
-            .page-hero h1 {
-                font-size: 32px;
-            }
-
-            .clock-card {
-                padding: 35px 20px;
-            }
-
-            .time {
-                font-size: 45px;
-                letter-spacing: 1px;
-            }
-
-            .date {
-                font-size: 17px;
+                padding: 12px 0;
             }
 
             .info-grid {
                 grid-template-columns: 1fr;
             }
 
-            .logo {
-                font-size: 22px;
-            }
-
-            .logo img {
-                width: 42px;
-                height: 42px;
+            #clock {
+                letter-spacing: 1px;
             }
         }
-
     </style>
-
 </head>
 
 <body>
 
-
-<!-- ================= HEADER ================= -->
-
 <header>
+    <div class="container nav">
 
-    <nav>
+        <a href="index.php" class="logo">
+            &lt;Kursus<span>Ku/&gt;</span>
+        </a>
 
-        <div class="logo">
+        <nav>
+            <a href="index.php">Katalog</a>
+            <a href="fee-calculator.php">Kalkulator</a>
+            <a href="server-time.php" class="active">Server Time</a>
+        </nav>
 
-            <img
-                src="assets/images/logo-kursus.png"
-                alt="Logo KursusKu"
-            >
-
-            <span>KursusKu</span>
-
-        </div>
-
-
-        <div class="nav-links">
-
-            <a href="index.php">
-                Katalog
-            </a>
-
-            <a href="fee-calculator.php">
-                Kalkulator
-            </a>
-
-            <a href="server-time.php" class="active">
-                Server Time
-            </a>
-
-        </div>
-
-    </nav>
-
+    </div>
 </header>
 
+<section class="hero">
+    <div class="container">
 
-<!-- ================= PAGE HERO ================= -->
+        <div class="terminal">
+            $ php server-time.php
+        </div>
 
-<section class="page-hero">
+        <h1>
+            Server <span>Time</span>
+        </h1>
 
-    <div class="icon">
-        ⏰
+        <p>
+            Menampilkan waktu server KursusKu secara real-time.
+        </p>
+
     </div>
-
-    <h1>
-        Server Time
-    </h1>
-
-    <p>
-        Menampilkan waktu berdasarkan server KursusKu.
-    </p>
-
 </section>
 
-
-<!-- ================= CLOCK ================= -->
-
-<main class="container">
+<main>
 
     <div class="clock-card">
 
-        <div class="clock-icon">
-            🕐
+        <div class="clock-label">
+            &gt;_ server_clock.exe
         </div>
 
-        <h2>
-            Waktu Server Saat Ini
-        </h2>
-
-        <div class="time" id="clock">
+        <div id="clock">
             <?= $serverTime; ?>
         </div>
 
-        <div class="date">
+        <div id="date">
             <?= $serverDate; ?>
         </div>
 
@@ -359,102 +293,59 @@ $serverDate = date('d F Y');
 
     </div>
 
-
-    <!-- ================= INFORMATION ================= -->
-
     <div class="info-grid">
 
         <div class="info-card">
-
-            <div class="icon">
-                🇮🇩
-            </div>
-
-            <h3>
-                Zona Waktu
-            </h3>
-
-            <p>
-                Waktu Indonesia Barat
-            </p>
-
+            <div class="info-icon">🌏</div>
+            <h3>Zona Waktu</h3>
+            <p>Asia/Jakarta — Waktu Indonesia Barat</p>
         </div>
 
-
         <div class="info-card">
-
-            <div class="icon">
-                🖥️
-            </div>
-
-            <h3>
-                Sumber Waktu
-            </h3>
-
-            <p>
-                Server KursusKu
-            </p>
-
+            <div class="info-icon">🐘</div>
+            <h3>Sumber Waktu</h3>
+            <p>PHP Server menggunakan date() function</p>
         </div>
 
-
         <div class="info-card">
-
-            <div class="icon">
-                🔄
-            </div>
-
-            <h3>
-                Status
-            </h3>
-
-            <p>
-                Waktu diperbarui otomatis
-            </p>
-
+            <div class="info-icon">●</div>
+            <h3>Status</h3>
+            <p class="status">● Server aktif</p>
         </div>
 
     </div>
 
 </main>
 
-
-<!-- ================= FOOTER ================= -->
-
 <footer>
-
-    <p>
-        &copy; <?= date('Y'); ?>
-        <strong>KursusKu</strong>.
-        Belajar Skill Baru, Bangun Masa Depan.
-    </p>
-
+    &lt;Kursus<span>Ku/&gt;</span> — Belajar Teknologi, Bangun Masa Depan
 </footer>
 
-
-<!-- ================= JAVASCRIPT ================= -->
-
 <script>
+function updateClock() {
+    const now = new Date();
 
-    function updateClock() {
+    const time = new Intl.DateTimeFormat('id-ID', {
+        timeZone: 'Asia/Jakarta',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    }).format(now);
 
-        const now = new Date();
+    const date = new Intl.DateTimeFormat('id-ID', {
+        timeZone: 'Asia/Jakarta',
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+    }).format(now);
 
-        const hours =
-            String(now.getHours()).padStart(2, '0');
+    document.getElementById('clock').textContent = time;
+    document.getElementById('date').textContent = date;
+}
 
-        const minutes =
-            String(now.getMinutes()).padStart(2, '0');
-
-        const seconds =
-            String(now.getSeconds()).padStart(2, '0');
-
-        document.getElementById('clock').textContent =
-            hours + ':' + minutes + ':' + seconds;
-    }
-
-    setInterval(updateClock, 1000);
-
+updateClock();
+setInterval(updateClock, 1000);
 </script>
 
 </body>

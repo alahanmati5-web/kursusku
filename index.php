@@ -11,9 +11,12 @@ $kursus = getKursus();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>KursusKu - Belajar Skill Baru</title>
+    <title>KursusKu — Belajar Coding & Teknologi</title>
 
     <style>
+        /* =========================
+           RESET
+        ========================== */
         * {
             margin: 0;
             padding: 0;
@@ -25,574 +28,731 @@ $kursus = getKursus();
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            color: #1e293b;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #07110d;
+            color: #e5f9ec;
+            line-height: 1.6;
         }
 
-        /* ================= HEADER ================= */
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
 
+        img {
+            max-width: 100%;
+        }
+
+        /* =========================
+           HEADER
+        ========================== */
         header {
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: rgba(15, 23, 42, 0.97);
-            padding: 15px 7%;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+
+            background: rgba(2, 10, 6, 0.95);
+            border-bottom: 1px solid #123d26;
+            backdrop-filter: blur(12px);
         }
 
-        nav {
+        .navbar {
+            width: 90%;
             max-width: 1200px;
             margin: auto;
+
+            min-height: 75px;
+
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            gap: 30px;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
-            color: white;
-            font-size: 25px;
+            gap: 12px;
+
+            font-size: 22px;
             font-weight: bold;
+            color: #39ff88;
+        }
+
+        .logo::before {
+            content: ">_";
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 42px;
+            height: 42px;
+
+            border: 1px solid #39ff88;
+            border-radius: 10px;
+
+            color: #39ff88;
+            background: #061b10;
+
+            box-shadow: 0 0 15px rgba(57, 255, 136, 0.25);
+
+            font-family: monospace;
         }
 
         .logo img {
-            width: 48px;
-            height: 48px;
+            width: 45px;
+            height: 45px;
             object-fit: contain;
-            background: white;
-            border-radius: 50%;
-            padding: 3px;
         }
 
-        .nav-links {
+        nav {
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .nav-links a {
-            color: #cbd5e1;
-            text-decoration: none;
-            padding: 10px 15px;
+        nav a {
+            padding: 9px 14px;
+
+            color: #a7b9ae;
+            font-size: 14px;
+
             border-radius: 8px;
+
             transition: 0.3s;
         }
 
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: white;
-            background: #2563eb;
+        nav a:hover {
+            color: #39ff88;
+            background: #0b2517;
+
+            box-shadow: 0 0 12px rgba(57, 255, 136, 0.12);
         }
 
-        /* ================= HERO ================= */
-
+        /* =========================
+           HERO
+        ========================== */
         .hero {
+            position: relative;
+            overflow: hidden;
+
             min-height: 570px;
-            padding: 80px 7%;
+
             display: flex;
             align-items: center;
+
             background:
-                linear-gradient(135deg, #0f172a, #1d4ed8, #7c3aed);
-            color: white;
+                linear-gradient(
+                    135deg,
+                    #020807 0%,
+                    #062315 50%,
+                    #07110d 100%
+                );
+        }
+
+        /* Efek grid coding */
+        .hero::before {
+            content: "";
+
+            position: absolute;
+            inset: 0;
+
+            background-image:
+                linear-gradient(rgba(57,255,136,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(57,255,136,0.05) 1px, transparent 1px);
+
+            background-size: 40px 40px;
+
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: "";
+
+            position: absolute;
+
+            width: 350px;
+            height: 350px;
+
+            right: -120px;
+            top: -100px;
+
+            background: #39ff88;
+            opacity: 0.08;
+
+            border-radius: 50%;
+            filter: blur(80px);
+        }
+
+        .hero-container {
+            position: relative;
+            z-index: 2;
+
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            align-items: center;
+            gap: 60px;
+
+            padding: 70px 0;
         }
 
         .hero-content {
-            max-width: 1200px;
-            width: 100%;
-            margin: auto;
-            display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            gap: 50px;
-            align-items: center;
+            max-width: 650px;
         }
 
-        .badge {
+        .code-badge {
             display: inline-block;
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.25);
-            padding: 9px 16px;
-            border-radius: 30px;
+
             margin-bottom: 20px;
+            padding: 8px 14px;
+
+            color: #39ff88;
+            background: #061b10;
+
+            border: 1px solid #1e6b3d;
+            border-radius: 8px;
+
+            font-family: monospace;
             font-size: 14px;
+
+            box-shadow: 0 0 18px rgba(57, 255, 136, 0.12);
         }
 
         .hero h1 {
-            font-size: 52px;
+            font-size: clamp(40px, 6vw, 68px);
             line-height: 1.1;
-            margin-bottom: 20px;
+
+            margin-bottom: 22px;
+
+            color: #f0fff5;
         }
 
         .hero h1 span {
-            color: #93c5fd;
+            color: #39ff88;
+
+            text-shadow:
+                0 0 10px rgba(57,255,136,0.6),
+                0 0 30px rgba(57,255,136,0.25);
         }
 
         .hero p {
-            color: #dbeafe;
-            font-size: 18px;
-            line-height: 1.7;
             max-width: 600px;
+
             margin-bottom: 30px;
+
+            color: #9db1a4;
+            font-size: 17px;
         }
 
         .hero-buttons {
             display: flex;
-            gap: 15px;
+            gap: 14px;
             flex-wrap: wrap;
         }
 
         .btn {
-            display: inline-block;
-            text-decoration: none;
-            padding: 14px 22px;
-            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 13px 20px;
+
+            border-radius: 8px;
+
             font-weight: bold;
             transition: 0.3s;
         }
 
         .btn-primary {
-            background: white;
-            color: #1d4ed8;
+            color: #021008;
+            background: #39ff88;
+
+            box-shadow:
+                0 0 15px rgba(57,255,136,0.35);
         }
 
         .btn-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+
+            box-shadow:
+                0 0 25px rgba(57,255,136,0.55);
         }
 
         .btn-secondary {
-            border: 1px solid rgba(255,255,255,0.4);
-            color: white;
+            color: #39ff88;
+
+            border: 1px solid #1e6b3d;
+            background: #06140c;
         }
 
         .btn-secondary:hover {
-            background: rgba(255,255,255,0.12);
+            background: #0b2918;
+            border-color: #39ff88;
+        }
+
+        .hero-image {
+            position: relative;
+        }
+
+        .hero-image::before {
+            content: "</>";
+
+            position: absolute;
+
+            right: -15px;
+            top: -18px;
+
+            z-index: 2;
+
+            padding: 10px 13px;
+
+            color: #39ff88;
+            background: #020807;
+
+            border: 1px solid #1e6b3d;
+            border-radius: 8px;
+
+            font-family: monospace;
+
+            box-shadow: 0 0 20px rgba(57,255,136,0.2);
         }
 
         .hero-image img {
             width: 100%;
-            height: 350px;
+            height: 390px;
+
             object-fit: cover;
-            border-radius: 25px;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.35);
-            border: 5px solid rgba(255,255,255,0.15);
+
+            border-radius: 18px;
+
+            border: 1px solid #1e6b3d;
+
+            box-shadow:
+                0 0 35px rgba(57,255,136,0.15);
         }
 
-        /* ================= BELAJAR BERSAMA ================= */
-
-        .belajar-section {
+        /* =========================
+           SECTION
+        ========================== */
+        .section {
+            width: 90%;
             max-width: 1200px;
-            width: 86%;
-            margin: 80px auto;
-            padding: 45px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
-            align-items: center;
 
-            background: white;
-            border-radius: 25px;
-            box-shadow: 0 12px 35px rgba(15,23,42,0.08);
-        }
-
-        .belajar-image {
-            position: relative;
-        }
-
-        .belajar-image img {
-            width: 100%;
-            height: 350px;
-            display: block;
-            object-fit: cover;
-            border-radius: 20px;
-        }
-
-        .image-badge {
-            position: absolute;
-            left: 20px;
-            bottom: 20px;
-
-            background: rgba(15, 23, 42, 0.92);
-            color: white;
-
-            padding: 12px 18px;
-            border-radius: 12px;
-
-            font-size: 14px;
-            font-weight: bold;
-
-            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-        }
-
-        .belajar-content .small-title {
-            display: inline-block;
-            color: #2563eb;
-            background: #eff6ff;
-
-            padding: 7px 13px;
-            border-radius: 20px;
-
-            font-size: 13px;
-            font-weight: bold;
-
-            margin-bottom: 15px;
-        }
-
-        .belajar-content h2 {
-            font-size: 38px;
-            color: #0f172a;
-            line-height: 1.2;
-            margin-bottom: 18px;
-        }
-
-        .belajar-content h2 span {
-            color: #2563eb;
-        }
-
-        .belajar-content p {
-            color: #64748b;
-            font-size: 16px;
-            line-height: 1.8;
-            margin-bottom: 25px;
-        }
-
-        /* ================= BENEFITS ================= */
-
-        .benefits {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .benefit {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-
-            padding: 12px;
-
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-
-            color: #334155;
-            font-size: 14px;
-            font-weight: bold;
-
-            transition: 0.3s;
-        }
-
-        .benefit:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(15,23,42,0.08);
-        }
-
-        .benefit-icon {
-            width: 35px;
-            height: 35px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background: #dbeafe;
-            border-radius: 9px;
-
-            flex-shrink: 0;
-        }
-
-        /* ================= KATALOG ================= */
-
-        .container {
-            width: 86%;
-            max-width: 1200px;
-            margin: 70px auto;
+            margin: auto;
+            padding: 80px 0;
         }
 
         .section-title {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
+        }
+
+        .section-title .terminal {
+            display: inline-block;
+
+            margin-bottom: 12px;
+
+            color: #39ff88;
+
+            font-family: monospace;
+            font-size: 14px;
         }
 
         .section-title h2 {
             font-size: 36px;
-            color: #0f172a;
-            margin-bottom: 10px;
+            color: #f0fff5;
         }
 
         .section-title p {
-            color: #64748b;
-            font-size: 16px;
+            margin-top: 10px;
+            color: #91a59a;
+        }
+
+        /* =========================
+           BELAJAR BERSAMA
+        ========================== */
+        .belajar {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+
+            align-items: center;
+            gap: 60px;
+        }
+
+        .belajar-image img {
+            width: 100%;
+            height: 330px;
+
+            object-fit: cover;
+
+            border-radius: 16px;
+
+            border: 1px solid #1e6b3d;
+
+            box-shadow:
+                0 0 30px rgba(57,255,136,0.12);
+        }
+
+        .belajar-content .tag {
+            display: inline-block;
+
+            margin-bottom: 15px;
+            padding: 6px 12px;
+
+            color: #39ff88;
+            background: #061b10;
+
+            border: 1px solid #1e6b3d;
+            border-radius: 6px;
+
+            font-family: monospace;
+            font-size: 13px;
+        }
+
+        .belajar-content h2 {
+            margin-bottom: 18px;
+
+            font-size: 36px;
+            color: #f0fff5;
+        }
+
+        .belajar-content h2 span {
+            color: #39ff88;
+        }
+
+        .belajar-content p {
+            color: #9caf9f;
+            margin-bottom: 25px;
+        }
+
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .benefit {
+            padding: 14px;
+
+            background: #0a1710;
+            border: 1px solid #163d26;
+
+            border-radius: 10px;
+
+            color: #c7d8cc;
+        }
+
+        .benefit span {
+            color: #39ff88;
+            margin-right: 7px;
+        }
+
+        /* =========================
+           KATALOG KURSUS
+        ========================== */
+        .catalog {
+            background: #050d08;
+
+            border-top: 1px solid #10291b;
+            border-bottom: 1px solid #10291b;
         }
 
         .course-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
+            gap: 20px;
         }
 
         .course-card {
-            background: white;
+            position: relative;
+
             padding: 25px;
 
-            border-radius: 18px;
-            border: 1px solid #e2e8f0;
+            background: #0a1710;
 
-            box-shadow: 0 8px 25px rgba(15,23,42,0.06);
+            border: 1px solid #173d27;
+            border-radius: 14px;
+
+            transition: 0.3s;
+
+            overflow: hidden;
+        }
+
+        .course-card::before {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            top: 0;
+
+            width: 100%;
+            height: 2px;
+
+            background: #39ff88;
+
+            transform: scaleX(0);
+            transform-origin: left;
 
             transition: 0.3s;
         }
 
         .course-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 18px 35px rgba(15,23,42,0.12);
+            transform: translateY(-6px);
+
+            border-color: #287a49;
+
+            box-shadow:
+                0 10px 35px rgba(0,0,0,0.4),
+                0 0 20px rgba(57,255,136,0.08);
         }
 
-        .course-icon {
-            width: 55px;
-            height: 55px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background: #eff6ff;
-            border-radius: 14px;
-
-            font-size: 27px;
-            margin-bottom: 18px;
+        .course-card:hover::before {
+            transform: scaleX(1);
         }
 
-        .category {
+        .course-category {
             display: inline-block;
 
-            color: #2563eb;
-            background: #eff6ff;
+            margin-bottom: 14px;
+            padding: 5px 10px;
 
-            padding: 6px 10px;
-            border-radius: 20px;
+            color: #39ff88;
+            background: #061b10;
+
+            border: 1px solid #174c2c;
+            border-radius: 6px;
 
             font-size: 12px;
-            font-weight: bold;
-
-            margin-bottom: 12px;
+            font-family: monospace;
         }
 
         .course-card h3 {
+            min-height: 55px;
+
+            margin-bottom: 15px;
+
+            color: #edfdf3;
             font-size: 20px;
-            margin-bottom: 12px;
-            color: #0f172a;
         }
 
         .price {
-            font-size: 21px;
-            font-weight: bold;
-            color: #2563eb;
             margin-bottom: 15px;
+
+            color: #39ff88;
+
+            font-size: 22px;
+            font-weight: bold;
         }
 
-        .info {
-            color: #64748b;
+        .course-info {
+            display: flex;
+            justify-content: space-between;
+
+            margin-bottom: 10px;
+
+            color: #879b8e;
+            font-size: 13px;
+        }
+
+        .progress {
+            height: 7px;
+
             margin-bottom: 14px;
-            font-size: 14px;
+
+            background: #16251c;
+
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+
+            background: #39ff88;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 0 10px rgba(57,255,136,0.5);
         }
 
         .status {
             display: inline-block;
 
-            padding: 7px 13px;
-            border-radius: 20px;
+            padding: 5px 10px;
+
+            border-radius: 6px;
 
             font-size: 12px;
             font-weight: bold;
         }
 
-        .status-full {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-
         .status-available {
-            background: #dcfce7;
-            color: #16a34a;
+            color: #39ff88;
+            background: #092617;
+            border: 1px solid #185d35;
         }
 
-        .capacity {
-            height: 8px;
-            background: #e2e8f0;
-
-            border-radius: 20px;
-            overflow: hidden;
-
-            margin-top: 17px;
+        .status-full {
+            color: #ff7373;
+            background: #2a0e0e;
+            border: 1px solid #6d2929;
         }
 
-        .capacity-bar {
-            height: 100%;
-
-            background:
-                linear-gradient(90deg, #2563eb, #7c3aed);
-
-            border-radius: 20px;
-        }
-
-        /* ================= VIDEO ================= */
-
+        /* =========================
+           VIDEO
+        ========================== */
         .media {
-            margin-top: 70px;
-
-            background: white;
-            padding: 40px;
-
-            border-radius: 20px;
-
             text-align: center;
-
-            box-shadow: 0 8px 25px rgba(15,23,42,0.06);
         }
 
-        .media h2 {
-            font-size: 30px;
-            color: #0f172a;
-            margin-bottom: 10px;
-        }
-
-        .media p {
-            color: #64748b;
-            margin-bottom: 25px;
-        }
-
-        video {
+        .media video {
             width: 100%;
-            max-width: 800px;
+            max-width: 850px;
+
+            display: block;
+            margin: auto;
+
             border-radius: 15px;
+
+            border: 1px solid #1e6b3d;
+
+            box-shadow:
+                0 0 35px rgba(57,255,136,0.12);
         }
 
-        /* ================= FOOTER ================= */
-
+        /* =========================
+           FOOTER
+        ========================== */
         footer {
-            background: #0f172a;
-            color: #cbd5e1;
+            padding: 35px 20px;
 
             text-align: center;
 
-            padding: 30px;
+            background: #020807;
 
-            margin-top: 80px;
+            border-top: 1px solid #123d26;
+
+            color: #718277;
         }
 
         footer strong {
-            color: white;
+            color: #39ff88;
         }
 
-        /* ================= RESPONSIVE ================= */
+        .footer-code {
+            margin-bottom: 10px;
 
+            color: #39ff88;
+
+            font-family: monospace;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================== */
         @media (max-width: 900px) {
 
-            .hero-content {
+            .navbar {
+                width: 94%;
+            }
+
+            nav {
+                gap: 0;
+            }
+
+            nav a {
+                padding: 8px 9px;
+                font-size: 13px;
+            }
+
+            .hero-container,
+            .belajar {
                 grid-template-columns: 1fr;
+            }
+
+            .hero-container {
                 text-align: center;
             }
 
-            .hero p {
-                margin-left: auto;
-                margin-right: auto;
+            .hero-content {
+                margin: auto;
             }
 
             .hero-buttons {
                 justify-content: center;
             }
 
-            .belajar-section {
-                grid-template-columns: 1fr;
+            .hero-image {
+                max-width: 700px;
+                margin: auto;
+            }
+
+            .hero-image img,
+            .belajar-image img {
+                height: 280px;
             }
 
             .course-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
-
-            .hero-image img {
-                height: 280px;
-            }
         }
 
         @media (max-width: 600px) {
 
-            header {
-                padding: 12px 5%;
+            .navbar {
+                flex-direction: column;
+                padding: 15px 0;
+                gap: 10px;
             }
 
             nav {
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            .nav-links {
                 flex-wrap: wrap;
                 justify-content: center;
             }
 
-            .nav-links a {
-                padding: 8px 10px;
-                font-size: 13px;
+            .hero {
+                min-height: auto;
             }
 
-            .hero {
-                padding: 60px 5%;
+            .hero-container {
+                padding: 55px 0;
             }
 
             .hero h1 {
-                font-size: 38px;
+                font-size: 40px;
             }
 
             .hero p {
-                font-size: 16px;
+                font-size: 15px;
             }
 
-            .hero-image img {
+            .hero-image img,
+            .belajar-image img {
                 height: 220px;
             }
 
-            .belajar-section {
-                width: 90%;
-                padding: 25px;
-                margin: 50px auto;
+            .section {
+                padding: 60px 0;
             }
 
-            .belajar-image img {
-                height: 230px;
-            }
-
+            .section-title h2,
             .belajar-content h2 {
-                font-size: 30px;
-            }
-
-            .benefits {
-                grid-template-columns: 1fr;
-            }
-
-            .container {
-                width: 90%;
-                margin: 50px auto;
+                font-size: 29px;
             }
 
             .course-grid {
                 grid-template-columns: 1fr;
             }
 
-            .media {
-                padding: 25px 15px;
-            }
-
-            .logo {
-                font-size: 22px;
-            }
-
-            .logo img {
-                width: 42px;
-                height: 42px;
+            .benefits {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -600,81 +760,58 @@ $kursus = getKursus();
 
 <body>
 
-<!-- ================= HEADER ================= -->
-
+<!-- =========================
+     HEADER
+========================== -->
 <header>
+    <div class="navbar">
 
-    <nav>
+        <a href="index.php" class="logo">
+            KursusKu
+        </a>
 
-        <div class="logo">
+        <nav>
+            <a href="index.php">Katalog</a>
+            <a href="fee-calculator.php">Kalkulator</a>
+            <a href="server-time.php">Server Time</a>
+        </nav>
 
-            <img
-                src="assets/images/logo-kursus.png"
-                alt="Logo KursusKu"
-            >
-
-            <span>KursusKu</span>
-
-        </div>
-
-        <div class="nav-links">
-
-            <a href="index.php" class="active">
-                Katalog
-            </a>
-
-            <a href="fee-calculator.php">
-                Kalkulator
-            </a>
-
-            <a href="server-time.php">
-                Server Time
-            </a>
-
-        </div>
-
-    </nav>
-
+    </div>
 </header>
 
 
-<!-- ================= HERO ================= -->
-
+<!-- =========================
+     HERO
+========================== -->
 <section class="hero">
 
-    <div class="hero-content">
+    <div class="hero-container">
 
-        <div>
+        <div class="hero-content">
 
-            <div class="badge">
-                🚀 Platform Belajar Online
+            <div class="code-badge">
+                &lt; coding /&gt; #BelajarTeknologi
             </div>
 
             <h1>
-                Tingkatkan Skill,
+                Belajar Coding,
                 <span>Bangun Masa Depan.</span>
             </h1>
 
             <p>
-                Temukan berbagai kursus pilihan di KursusKu.
-                Belajar teknologi, desain, data, dan digital marketing
-                dengan cara yang lebih mudah dan menyenangkan.
+                Tingkatkan kemampuan programming, teknologi,
+                desain, dan digital bersama KursusKu.
+                Belajar dari dasar hingga siap membuat proyek sendiri.
             </p>
 
             <div class="hero-buttons">
 
-                <a
-                    href="#kursus"
-                    class="btn btn-primary"
-                >
-                    📚 Lihat Kursus
+                <a href="#katalog" class="btn btn-primary">
+                    &lt;/&gt; Lihat Kursus
                 </a>
 
-                <a
-                    href="fee-calculator.php"
-                    class="btn btn-secondary"
-                >
-                    🧮 Hitung Biaya
+                <a href="fee-calculator.php" class="btn btn-secondary">
+                    🧮 Kalkulator
                 </a>
 
             </div>
@@ -686,7 +823,7 @@ $kursus = getKursus();
 
             <img
                 src="assets/images/hero-kursus.png"
-                alt="Belajar bersama KursusKu"
+                alt="Belajar Programming"
             >
 
         </div>
@@ -696,85 +833,61 @@ $kursus = getKursus();
 </section>
 
 
-<!-- ================= BELAJAR BERSAMA ================= -->
+<!-- =========================
+     BELAJAR BERSAMA
+========================== -->
+<section class="section">
 
-<section class="belajar-section">
+    <div class="belajar">
 
-    <div class="belajar-image">
+        <div class="belajar-image">
 
-        <img
-            src="assets/images/hero-kursus.png"
-            alt="Belajar Bersama KursusKu"
-        >
+            <img
+                src="assets/images/kursus-tambahan.png"
+                alt="Belajar Coding"
+            >
 
-        <div class="image-badge">
-            🎓 Belajar Bersama KursusKu
         </div>
 
-    </div>
 
+        <div class="belajar-content">
 
-    <div class="belajar-content">
+            <span class="tag">
+                // learn_to_code
+            </span>
 
-        <div class="small-title">
-            ✨ Pengalaman Belajar
-        </div>
+            <h2>
+                Belajar Bersama
+                <span>KursusKu</span>
+            </h2>
 
-        <h2>
-            Belajar Bersama
-            <span>KursusKu</span>
-        </h2>
+            <p>
+                KursusKu dirancang untuk membantu kamu memahami
+                teknologi dengan cara yang sederhana, praktis,
+                dan mudah dipahami.
+            </p>
 
-        <p>
-            KursusKu hadir untuk membantu kamu mengembangkan
-            kemampuan dan mempelajari skill baru. Pilih kursus
-            yang sesuai dengan minatmu dan mulai perjalanan
-            belajar untuk membangun masa depan yang lebih baik.
-        </p>
+            <div class="benefits">
 
-
-        <div class="benefits">
-
-            <div class="benefit">
-
-                <div class="benefit-icon">
-                    📚
+                <div class="benefit">
+                    <span>✓</span>
+                    Materi mudah dipahami
                 </div>
 
-                Materi Beragam
-
-            </div>
-
-
-            <div class="benefit">
-
-                <div class="benefit-icon">
-                    💻
+                <div class="benefit">
+                    <span>✓</span>
+                    Praktik langsung
                 </div>
 
-                Belajar Teknologi
-
-            </div>
-
-
-            <div class="benefit">
-
-                <div class="benefit-icon">
-                    🎯
+                <div class="benefit">
+                    <span>✓</span>
+                    Materi teknologi terbaru
                 </div>
 
-                Sesuai Tujuan
-
-            </div>
-
-
-            <div class="benefit">
-
-                <div class="benefit-icon">
-                    🚀
+                <div class="benefit">
+                    <span>✓</span>
+                    Cocok untuk pemula
                 </div>
-
-                Tingkatkan Skill
 
             </div>
 
@@ -785,136 +898,122 @@ $kursus = getKursus();
 </section>
 
 
-<!-- ================= KATALOG ================= -->
+<!-- =========================
+     KATALOG
+========================== -->
+<section class="catalog" id="katalog">
 
-<main
-    class="container"
-    id="kursus"
->
+    <div class="section">
+
+        <div class="section-title">
+
+            <div class="terminal">
+                $ kursusku --list-courses
+            </div>
+
+            <h2>
+                Katalog Kursus
+            </h2>
+
+            <p>
+                Pilih skill yang ingin kamu pelajari dan mulai coding.
+            </p>
+
+        </div>
+
+
+        <div class="course-grid">
+
+            <?php foreach ($kursus as $item): ?>
+
+                <?php
+                    $status = getStatusKursus(
+                        $item['peserta'],
+                        $item['kapasitas']
+                    );
+
+                    $persentase = getPersentaseKapasitas(
+                        $item['peserta'],
+                        $item['kapasitas']
+                    );
+                ?>
+
+                <div class="course-card">
+
+                    <span class="course-category">
+                        <?= htmlspecialchars($item['kategori']); ?>
+                    </span>
+
+                    <h3>
+                        <?= htmlspecialchars($item['nama']); ?>
+                    </h3>
+
+                    <div class="price">
+                        <?= formatRupiah($item['harga']); ?>
+                    </div>
+
+                    <div class="course-info">
+
+                        <span>
+                            👨‍💻
+                            <?= $item['peserta']; ?>
+                            peserta
+                        </span>
+
+                        <span>
+                            <?= $item['kapasitas']; ?>
+                            kapasitas
+                        </span>
+
+                    </div>
+
+                    <div class="progress">
+
+                        <div
+                            class="progress-bar"
+                            style="width: <?= min($persentase, 100); ?>%;"
+                        ></div>
+
+                    </div>
+
+                    <span class="status <?= getStatusClass($status); ?>">
+                        <?= $status; ?>
+                    </span>
+
+                </div>
+
+            <?php endforeach; ?>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     VIDEO
+========================== -->
+<section class="section">
 
     <div class="section-title">
 
+        <div class="terminal">
+            $ kursusku --watch-intro
+        </div>
+
         <h2>
-            Katalog Kursus
+            Kenalan dengan KursusKu
         </h2>
 
         <p>
-            Pilih kursus yang sesuai dengan kebutuhan dan tujuanmu.
+            Lihat video pengenalan KursusKu.
         </p>
 
     </div>
 
 
-    <div class="course-grid">
-
-        <?php foreach ($kursus as $item): ?>
-
-            <?php
-
-                $status = getStatusKursus(
-                    $item['peserta'],
-                    $item['kapasitas']
-                );
-
-                $persentase = getPersentaseKapasitas(
-                    $item['peserta'],
-                    $item['kapasitas']
-                );
-
-                $statusClass = getStatusClass($status);
-
-            ?>
-
-
-            <div class="course-card">
-
-                <div class="course-icon">
-                    🎓
-                </div>
-
-
-                <div class="category">
-
-                    <?= htmlspecialchars(
-                        $item['kategori']
-                    ); ?>
-
-                </div>
-
-
-                <h3>
-
-                    <?= htmlspecialchars(
-                        $item['nama']
-                    ); ?>
-
-                </h3>
-
-
-                <div class="price">
-
-                    <?= formatRupiah(
-                        $item['harga']
-                    ); ?>
-
-                </div>
-
-
-                <div class="info">
-
-                    👥
-                    <?= $item['peserta']; ?>
-
-                    peserta dari
-
-                    <?= $item['kapasitas']; ?>
-
-                    kapasitas
-
-                </div>
-
-
-                <span
-                    class="status <?= $statusClass; ?>"
-                >
-
-                    <?= $status; ?>
-
-                </span>
-
-
-                <div class="capacity">
-
-                    <div
-                        class="capacity-bar"
-                        style="width: <?= min(
-                            $persentase,
-                            100
-                        ); ?>%;"
-                    ></div>
-
-                </div>
-
-            </div>
-
-        <?php endforeach; ?>
-
-    </div>
-
-
-    <!-- ================= VIDEO ================= -->
-
-    <section class="media">
-
-        <h2>
-            🎬 Kenali KursusKu
-        </h2>
-
-        <p>
-            Lihat video perkenalan dan kenali pengalaman belajar
-            yang tersedia di KursusKu.
-        </p>
-
+    <div class="media">
 
         <video controls>
 
@@ -923,29 +1022,28 @@ $kursus = getKursus();
                 type="video/mp4"
             >
 
-            Browser Anda tidak mendukung video.
+            Browser kamu tidak mendukung video HTML5.
 
         </video>
 
-    </section>
+    </div>
 
-</main>
+</section>
 
 
-<!-- ================= FOOTER ================= -->
-
+<!-- =========================
+     FOOTER
+========================== -->
 <footer>
 
+    <div class="footer-code">
+        &lt;KursusKu /&gt;
+    </div>
+
     <p>
-
-        &copy;
-        <?= date('Y'); ?>
-
+        © <?= date('Y'); ?>
         <strong>KursusKu</strong>.
-
-        Belajar Skill Baru,
-        Bangun Masa Depan.
-
+        Belajar Teknologi, Bangun Masa Depan.
     </p>
 
 </footer>

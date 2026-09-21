@@ -2,546 +2,420 @@
 <?php
 require_once 'helpers.php';
 
-$harga = 0;
-$diskon = 0;
 $hasil = null;
+$harga = '';
+$diskon = '';
+$error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $harga = (float) ($_POST['harga'] ?? 0);
     $diskon = (float) ($_POST['diskon'] ?? 0);
 
-    if ($harga >= 0 && $diskon >= 0 && $diskon <= 100) {
-        $hasil = hitungDiskon($harga, $diskon);
+    if ($harga < 0) {
+        $error = 'Harga tidak boleh kurang dari 0.';
+    } elseif ($diskon < 0 || $diskon > 100) {
+        $error = 'Diskon harus berada antara 0 sampai 100%.';
+    } else {
+        $totalBayar = hitungDiskon($harga, $diskon);
+        $potongan = $harga - $totalBayar;
+
+        $hasil = [
+            'harga' => $harga,
+            'diskon' => $diskon,
+            'potongan' => $potongan,
+            'total' => $totalBayar
+        ];
     }
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Kalkulator Biaya - KursusKu</title>
+    <title>KursusKu | Fee Calculator</title>
 
     <style>
-
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
             font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            color: #1e293b;
+            background: #07110d;
+            color: #eafff1;
+            min-height: 100vh;
         }
 
-        /* ================= HEADER ================= */
-
-        header {
-            background: #0f172a;
-            padding: 15px 7%;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-        }
-
-        nav {
-            max-width: 1200px;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: white;
-            font-size: 25px;
-            font-weight: bold;
-        }
-
-        .logo img {
-            width: 48px;
-            height: 48px;
-            object-fit: contain;
-            background: white;
-            border-radius: 50%;
-            padding: 3px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 8px;
-        }
-
-        .nav-links a {
-            color: #cbd5e1;
+        a {
             text-decoration: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            transition: 0.3s;
+            color: inherit;
         }
-
-        .nav-links a:hover,
-        .nav-links a.active {
-            background: #2563eb;
-            color: white;
-        }
-
-        /* ================= HERO ================= */
-
-        .page-hero {
-            background:
-                linear-gradient(135deg, #0f172a, #1d4ed8, #7c3aed);
-            color: white;
-            text-align: center;
-            padding: 70px 20px;
-        }
-
-        .page-hero .icon {
-            font-size: 45px;
-            margin-bottom: 15px;
-        }
-
-        .page-hero h1 {
-            font-size: 42px;
-            margin-bottom: 12px;
-        }
-
-        .page-hero p {
-            color: #dbeafe;
-            font-size: 17px;
-        }
-
-        /* ================= CALCULATOR ================= */
 
         .container {
             width: 90%;
-            max-width: 850px;
-            margin: 60px auto;
+            max-width: 1050px;
+            margin: auto;
+        }
+
+        header {
+            background: #020807;
+            border-bottom: 1px solid #174d2d;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav {
+            min-height: 72px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #39ff88;
+            text-shadow: 0 0 12px rgba(57,255,136,.5);
+        }
+
+        .logo span,
+        footer span {
+            color: #eafff1;
+        }
+
+        nav {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #91a59a;
+            padding: 9px 14px;
+            border-radius: 8px;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #39ff88;
+            background: #0d2116;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 70px 0 40px;
+            background:
+                linear-gradient(135deg, #020807, #062315, #07110d);
+        }
+
+        .terminal {
+            display: inline-block;
+            font-family: monospace;
+            color: #39ff88;
+            border: 1px solid #1d6b3c;
+            background: #0a1b11;
+            padding: 8px 14px;
+            border-radius: 30px;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            font-size: clamp(34px, 5vw, 52px);
+            margin-bottom: 12px;
+        }
+
+        h1 span {
+            color: #39ff88;
+            text-shadow: 0 0 18px rgba(57,255,136,.3);
+        }
+
+        .hero p {
+            color: #91a59a;
+        }
+
+        main {
+            padding-bottom: 70px;
         }
 
         .calculator {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 12px 35px rgba(15,23,42,0.08);
-            border: 1px solid #e2e8f0;
+            max-width: 650px;
+            margin: 30px auto;
+            background: #0a1710;
+            border: 1px solid #1e6b3d;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(57,255,136,.07);
         }
 
-        .calculator h2 {
-            text-align: center;
-            color: #0f172a;
-            margin-bottom: 10px;
+        .calculator-header {
+            font-family: monospace;
+            color: #39ff88;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #173d27;
+            padding-bottom: 15px;
         }
 
-        .calculator-description {
-            text-align: center;
-            color: #64748b;
-            margin-bottom: 35px;
-        }
-
-        .form-group {
-            margin-bottom: 22px;
-        }
-
-        .form-group label {
+        label {
             display: block;
-            font-weight: bold;
             margin-bottom: 8px;
-            color: #334155;
+            color: #b7c9bd;
+            font-weight: bold;
         }
 
-        .form-group input {
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        input {
             width: 100%;
-            padding: 14px 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
+            padding: 14px;
+            background: #050d08;
+            border: 1px solid #245638;
+            border-radius: 9px;
+            color: #eafff1;
             font-size: 16px;
             outline: none;
-            transition: 0.3s;
         }
 
-        .form-group input:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        input:focus {
+            border-color: #39ff88;
+            box-shadow: 0 0 15px rgba(57,255,136,.12);
         }
 
         .btn {
             width: 100%;
-            border: none;
-            padding: 15px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            color: white;
+            padding: 14px;
+            border: 1px solid #39ff88;
+            border-radius: 9px;
+            background: #39ff88;
+            color: #031108;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.3s;
+            transition: .3s;
         }
 
         .btn:hover {
+            box-shadow: 0 0 25px rgba(57,255,136,.3);
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(37,99,235,0.25);
         }
 
-        /* ================= RESULT ================= */
+        .error {
+            margin-top: 20px;
+            padding: 14px;
+            border-radius: 9px;
+            background: #321313;
+            border: 1px solid #7d3434;
+            color: #ff9b9b;
+        }
 
         .result {
             margin-top: 30px;
-            padding: 25px;
-            border-radius: 15px;
-            background: #eff6ff;
-            border: 1px solid #bfdbfe;
+            padding: 22px;
+            background: #071a0e;
+            border: 1px solid #276d42;
+            border-radius: 12px;
         }
 
-        .result h3 {
-            color: #1d4ed8;
+        .result-title {
+            color: #39ff88;
+            font-family: monospace;
             margin-bottom: 18px;
-            text-align: center;
         }
 
         .result-row {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #dbeafe;
+            gap: 15px;
+            padding: 11px 0;
+            border-bottom: 1px solid #173d27;
+            color: #a8b9ae;
         }
 
         .result-row:last-child {
             border-bottom: none;
         }
 
-        .result-row span:first-child {
-            color: #64748b;
-        }
-
-        .result-row span:last-child {
+        .result-row.total {
+            color: #39ff88;
+            font-size: 21px;
             font-weight: bold;
-            color: #1e293b;
+            padding-top: 18px;
         }
 
-        .total {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 2px solid #bfdbfe;
+        .info {
+            max-width: 650px;
+            margin: 20px auto;
+            padding: 18px;
+            background: #09140d;
+            border-left: 3px solid #39ff88;
+            color: #91a59a;
         }
-
-        .total span:last-child {
-            color: #2563eb;
-            font-size: 23px;
-        }
-
-        /* ================= INFO ================= */
-
-        .info-box {
-            margin-top: 25px;
-            padding: 20px;
-            background: #f8fafc;
-            border-radius: 12px;
-            border-left: 4px solid #2563eb;
-        }
-
-        .info-box h3 {
-            margin-bottom: 8px;
-            color: #0f172a;
-        }
-
-        .info-box p {
-            color: #64748b;
-            line-height: 1.6;
-            font-size: 14px;
-        }
-
-        /* ================= FOOTER ================= */
 
         footer {
-            margin-top: 80px;
-            padding: 30px;
-            background: #0f172a;
-            color: #cbd5e1;
+            border-top: 1px solid #173d27;
+            background: #020807;
             text-align: center;
+            padding: 25px;
+            color: #72847a;
         }
 
-        footer strong {
-            color: white;
+        footer span {
+            color: #39ff88;
         }
 
-        /* ================= RESPONSIVE ================= */
-
-        @media (max-width: 600px) {
-
-            header {
-                padding: 12px 5%;
-            }
-
-            nav {
+        @media (max-width: 700px) {
+            .nav {
                 flex-direction: column;
-                gap: 12px;
-            }
-
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .nav-links a {
-                padding: 8px 10px;
-                font-size: 13px;
-            }
-
-            .page-hero {
-                padding: 55px 20px;
-            }
-
-            .page-hero h1 {
-                font-size: 32px;
+                padding: 12px 0;
             }
 
             .calculator {
-                padding: 25px 20px;
-            }
-
-            .logo {
-                font-size: 22px;
-            }
-
-            .logo img {
-                width: 42px;
-                height: 42px;
+                padding: 22px;
             }
         }
-
     </style>
-
 </head>
 
 <body>
 
-<!-- ================= HEADER ================= -->
-
 <header>
+    <div class="container nav">
+        <a href="index.php" class="logo">&lt;Kursus<span>Ku/&gt;</span></a>
 
-    <nav>
-
-        <div class="logo">
-
-            <img
-                src="assets/images/logo-kursus.png"
-                alt="Logo KursusKu"
-            >
-
-            <span>KursusKu</span>
-
-        </div>
-
-        <div class="nav-links">
-
-            <a href="index.php">
-                Katalog
-            </a>
-
-            <a href="fee-calculator.php" class="active">
-                Kalkulator
-            </a>
-
-            <a href="server-time.php">
-                Server Time
-            </a>
-
-        </div>
-
-    </nav>
-
+        <nav>
+            <a href="index.php">Katalog</a>
+            <a href="fee-calculator.php" class="active">Kalkulator</a>
+            <a href="server-time.php">Server Time</a>
+        </nav>
+    </div>
 </header>
 
+<section class="hero">
+    <div class="container">
 
-<!-- ================= PAGE HERO ================= -->
+        <div class="terminal">
+            $ php fee-calculator.php
+        </div>
 
-<section class="page-hero">
+        <h1>
+            Fee <span>Calculator</span>
+        </h1>
 
-    <div class="icon">
-        🧮
+        <p>
+            Hitung biaya kursus dan diskon dengan cepat.
+        </p>
+
     </div>
-
-    <h1>
-        Kalkulator Biaya Kursus
-    </h1>
-
-    <p>
-        Hitung harga kursus setelah mendapatkan diskon.
-    </p>
-
 </section>
 
-
-<!-- ================= CALCULATOR ================= -->
-
-<main class="container">
+<main>
 
     <div class="calculator">
 
-        <h2>
-            💰 Hitung Biaya
-        </h2>
-
-        <p class="calculator-description">
-            Masukkan harga kursus dan persentase diskon.
-        </p>
-
+        <div class="calculator-header">
+            &gt;_ input_course_fee
+        </div>
 
         <form method="POST">
 
-            <div class="form-group">
-
-                <label for="harga">
-                    Harga Kursus
-                </label>
+            <div class="input-group">
+                <label for="harga">Harga Kursus</label>
 
                 <input
                     type="number"
                     id="harga"
                     name="harga"
-                    placeholder="Contoh: 350000"
-                    value="<?= htmlspecialchars($harga); ?>"
                     min="0"
+                    step="1000"
+                    value="<?= htmlspecialchars($harga); ?>"
+                    placeholder="Contoh: 350000"
                     required
                 >
-
             </div>
 
-
-            <div class="form-group">
-
-                <label for="diskon">
-                    Diskon (%)
-                </label>
+            <div class="input-group">
+                <label for="diskon">Diskon (%)</label>
 
                 <input
                     type="number"
                     id="diskon"
                     name="diskon"
-                    placeholder="Contoh: 10"
-                    value="<?= htmlspecialchars($diskon); ?>"
                     min="0"
                     max="100"
+                    step="1"
+                    value="<?= htmlspecialchars($diskon); ?>"
+                    placeholder="Contoh: 10"
                     required
                 >
-
             </div>
 
-
             <button type="submit" class="btn">
-                🧮 Hitung Sekarang
+                &gt;_ Hitung Sekarang
             </button>
 
         </form>
 
+        <?php if ($error): ?>
+
+            <div class="error">
+                ⚠ <?= htmlspecialchars($error); ?>
+            </div>
+
+        <?php endif; ?>
 
         <?php if ($hasil !== null): ?>
 
             <div class="result">
 
-                <h3>
-                    📊 Hasil Perhitungan
-                </h3>
-
-
-                <div class="result-row">
-
-                    <span>
-                        Harga Awal
-                    </span>
-
-                    <span>
-                        <?= formatRupiah($harga); ?>
-                    </span>
-
+                <div class="result-title">
+                    // calculation_result
                 </div>
 
-
                 <div class="result-row">
-
-                    <span>
-                        Diskon
-                    </span>
-
-                    <span>
-                        <?= htmlspecialchars($diskon); ?>%
-                    </span>
-
+                    <span>Harga Awal</span>
+                    <strong><?= formatRupiah($hasil['harga']); ?></strong>
                 </div>
 
-
                 <div class="result-row">
-
-                    <span>
-                        Potongan Harga
-                    </span>
-
-                    <span>
-                        <?= formatRupiah($harga - $hasil); ?>
-                    </span>
-
+                    <span>Diskon</span>
+                    <strong><?= $hasil['diskon']; ?>%</strong>
                 </div>
 
+                <div class="result-row">
+                    <span>Potongan Harga</span>
+                    <strong><?= formatRupiah($hasil['potongan']); ?></strong>
+                </div>
 
                 <div class="result-row total">
-
-                    <span>
-                        Total Bayar
-                    </span>
-
-                    <span>
-                        <?= formatRupiah($hasil); ?>
-                    </span>
-
+                    <span>Total Bayar</span>
+                    <strong><?= formatRupiah($hasil['total']); ?></strong>
                 </div>
 
             </div>
 
         <?php endif; ?>
 
+    </div>
 
-        <div class="info-box">
-
-            <h3>
-                💡 Cara Menggunakan
-            </h3>
-
-            <p>
-                Masukkan harga kursus, kemudian masukkan persentase
-                diskon yang diberikan. Klik tombol
-                <strong>Hitung Sekarang</strong> untuk melihat total
-                biaya yang harus dibayar.
-            </p>
-
-        </div>
-
+    <div class="info">
+        💡 <strong>Contoh:</strong> jika harga kursus Rp 350.000
+        dan diskon 10%, maka total pembayaran menjadi
+        <strong>Rp 315.000</strong>.
     </div>
 
 </main>
 
-
-<!-- ================= FOOTER ================= -->
-
 <footer>
-
-    <p>
-        &copy; <?= date('Y'); ?>
-        <strong>KursusKu</strong>.
-        Belajar Skill Baru, Bangun Masa Depan.
-    </p>
-
+    &lt;Kursus<span>Ku/&gt;</span> — Belajar Teknologi, Bangun Masa Depan
 </footer>
 
 </body>
-
 </html>
 ```
