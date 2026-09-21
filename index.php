@@ -2,6 +2,10 @@
 <?php
 require_once 'helpers.php';
 
+$siteName = "KursusKu";
+$tagline = "Belajar Teknologi, Bangun Masa Depan";
+$tahun = date("Y");
+
 $kursus = getKursus();
 ?>
 
@@ -10,459 +14,246 @@ $kursus = getKursus();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>KursusKu — Belajar Coding & Teknologi</title>
+    <title><?= $siteName; ?> | Katalog Kursus</title>
 
     <style>
-        /* =========================
-           RESET
-        ========================== */
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
         }
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: Arial, sans-serif;
             background: #07110d;
-            color: #e5f9ec;
+            color: #eafff1;
             line-height: 1.6;
         }
 
         a {
-            text-decoration: none;
             color: inherit;
+            text-decoration: none;
         }
 
-        img {
-            max-width: 100%;
+        .container {
+            width: 90%;
+            max-width: 1150px;
+            margin: auto;
         }
 
-        /* =========================
-           HEADER
-        ========================== */
         header {
+            background: #020807;
+            border-bottom: 1px solid #174d2d;
             position: sticky;
             top: 0;
-            z-index: 1000;
-
-            background: rgba(2, 10, 6, 0.95);
-            border-bottom: 1px solid #123d26;
-            backdrop-filter: blur(12px);
+            z-index: 100;
+            box-shadow: 0 0 20px rgba(57,255,136,.08);
         }
 
-        .navbar {
-            width: 90%;
-            max-width: 1200px;
-            margin: auto;
-
-            min-height: 75px;
-
+        .nav {
+            min-height: 72px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 30px;
+            gap: 20px;
         }
 
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-
-            font-size: 22px;
+            font-size: 24px;
             font-weight: bold;
             color: #39ff88;
+            text-shadow: 0 0 12px rgba(57,255,136,.5);
         }
 
-        .logo::before {
-            content: ">_";
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            width: 42px;
-            height: 42px;
-
-            border: 1px solid #39ff88;
-            border-radius: 10px;
-
-            color: #39ff88;
-            background: #061b10;
-
-            box-shadow: 0 0 15px rgba(57, 255, 136, 0.25);
-
-            font-family: monospace;
-        }
-
-        .logo img {
-            width: 45px;
-            height: 45px;
-            object-fit: contain;
+        .logo span {
+            color: #eafff1;
         }
 
         nav {
             display: flex;
-            align-items: center;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         nav a {
             padding: 9px 14px;
-
-            color: #a7b9ae;
-            font-size: 14px;
-
+            color: #9db2a5;
             border-radius: 8px;
-
-            transition: 0.3s;
+            transition: .3s;
         }
 
-        nav a:hover {
+        nav a:hover,
+        nav a.active {
             color: #39ff88;
-            background: #0b2517;
-
-            box-shadow: 0 0 12px rgba(57, 255, 136, 0.12);
+            background: #0d2116;
+            box-shadow: 0 0 12px rgba(57,255,136,.12);
         }
 
-        /* =========================
-           HERO
-        ========================== */
+        /* HERO */
+
         .hero {
-            position: relative;
-            overflow: hidden;
-
-            min-height: 570px;
-
-            display: flex;
-            align-items: center;
-
+            padding: 80px 0;
             background:
-                linear-gradient(
-                    135deg,
-                    #020807 0%,
-                    #062315 50%,
-                    #07110d 100%
+                linear-gradient(135deg, rgba(2,8,7,.95), rgba(5,35,19,.9)),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 39px,
+                    rgba(57,255,136,.035) 40px
                 );
         }
 
-        /* Efek grid coding */
-        .hero::before {
-            content: "";
-
-            position: absolute;
-            inset: 0;
-
-            background-image:
-                linear-gradient(rgba(57,255,136,0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(57,255,136,0.05) 1px, transparent 1px);
-
-            background-size: 40px 40px;
-
-            pointer-events: none;
-        }
-
-        .hero::after {
-            content: "";
-
-            position: absolute;
-
-            width: 350px;
-            height: 350px;
-
-            right: -120px;
-            top: -100px;
-
-            background: #39ff88;
-            opacity: 0.08;
-
-            border-radius: 50%;
-            filter: blur(80px);
-        }
-
-        .hero-container {
-            position: relative;
-            z-index: 2;
-
-            width: 90%;
-            max-width: 1200px;
-            margin: auto;
-
+        .hero-grid {
             display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 50px;
             align-items: center;
-            gap: 60px;
-
-            padding: 70px 0;
         }
 
-        .hero-content {
-            max-width: 650px;
-        }
-
-        .code-badge {
+        .badge {
             display: inline-block;
-
-            margin-bottom: 20px;
-            padding: 8px 14px;
-
             color: #39ff88;
-            background: #061b10;
-
-            border: 1px solid #1e6b3d;
-            border-radius: 8px;
-
+            border: 1px solid #1d6b3c;
+            background: #0a1b11;
+            padding: 8px 14px;
+            border-radius: 30px;
             font-family: monospace;
-            font-size: 14px;
-
-            box-shadow: 0 0 18px rgba(57, 255, 136, 0.12);
+            margin-bottom: 20px;
         }
 
         .hero h1 {
-            font-size: clamp(40px, 6vw, 68px);
-            line-height: 1.1;
-
-            margin-bottom: 22px;
-
-            color: #f0fff5;
+            font-size: clamp(38px, 6vw, 64px);
+            line-height: 1.05;
+            margin-bottom: 20px;
         }
 
         .hero h1 span {
             color: #39ff88;
-
-            text-shadow:
-                0 0 10px rgba(57,255,136,0.6),
-                0 0 30px rgba(57,255,136,0.25);
+            text-shadow: 0 0 20px rgba(57,255,136,.35);
         }
 
         .hero p {
+            color: #9db2a5;
             max-width: 600px;
-
-            margin-bottom: 30px;
-
-            color: #9db1a4;
             font-size: 17px;
+            margin-bottom: 30px;
         }
 
-        .hero-buttons {
+        .buttons {
             display: flex;
-            gap: 14px;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
         .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-
+            display: inline-block;
             padding: 13px 20px;
-
-            border-radius: 8px;
-
+            border-radius: 9px;
             font-weight: bold;
-            transition: 0.3s;
+            border: 1px solid #39ff88;
+            transition: .3s;
         }
 
         .btn-primary {
-            color: #021008;
             background: #39ff88;
-
-            box-shadow:
-                0 0 15px rgba(57,255,136,0.35);
+            color: #031108;
+            box-shadow: 0 0 20px rgba(57,255,136,.18);
         }
 
         .btn-primary:hover {
-            transform: translateY(-3px);
-
-            box-shadow:
-                0 0 25px rgba(57,255,136,0.55);
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(57,255,136,.35);
         }
 
         .btn-secondary {
             color: #39ff88;
-
-            border: 1px solid #1e6b3d;
-            background: #06140c;
+            background: #0a1710;
         }
 
         .btn-secondary:hover {
-            background: #0b2918;
-            border-color: #39ff88;
+            background: #102619;
         }
 
         .hero-image {
-            position: relative;
-        }
-
-        .hero-image::before {
-            content: "</>";
-
-            position: absolute;
-
-            right: -15px;
-            top: -18px;
-
-            z-index: 2;
-
-            padding: 10px 13px;
-
-            color: #39ff88;
-            background: #020807;
-
-            border: 1px solid #1e6b3d;
-            border-radius: 8px;
-
-            font-family: monospace;
-
-            box-shadow: 0 0 20px rgba(57,255,136,0.2);
+            background: #0a1710;
+            border: 1px solid #1c5733;
+            padding: 10px;
+            border-radius: 16px;
+            box-shadow: 0 0 35px rgba(57,255,136,.08);
         }
 
         .hero-image img {
             width: 100%;
-            height: 390px;
-
-            object-fit: cover;
-
-            border-radius: 18px;
-
-            border: 1px solid #1e6b3d;
-
-            box-shadow:
-                0 0 35px rgba(57,255,136,0.15);
+            display: block;
+            border-radius: 10px;
         }
 
-        /* =========================
-           SECTION
-        ========================== */
-        .section {
-            width: 90%;
-            max-width: 1200px;
+        /* SECTION */
 
-            margin: auto;
-            padding: 80px 0;
+        section {
+            padding: 70px 0;
         }
 
         .section-title {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
         }
 
-        .section-title .terminal {
-            display: inline-block;
-
-            margin-bottom: 12px;
-
+        .section-title small {
             color: #39ff88;
-
             font-family: monospace;
-            font-size: 14px;
         }
 
         .section-title h2 {
-            font-size: 36px;
-            color: #f0fff5;
+            font-size: 34px;
+            margin: 8px 0;
         }
 
         .section-title p {
-            margin-top: 10px;
             color: #91a59a;
         }
 
-        /* =========================
-           BELAJAR BERSAMA
-        ========================== */
-        .belajar {
-            display: grid;
-            grid-template-columns: 0.9fr 1.1fr;
-
-            align-items: center;
-            gap: 60px;
-        }
-
-        .belajar-image img {
-            width: 100%;
-            height: 330px;
-
-            object-fit: cover;
-
-            border-radius: 16px;
-
-            border: 1px solid #1e6b3d;
-
-            box-shadow:
-                0 0 30px rgba(57,255,136,0.12);
-        }
-
-        .belajar-content .tag {
-            display: inline-block;
-
-            margin-bottom: 15px;
-            padding: 6px 12px;
-
-            color: #39ff88;
-            background: #061b10;
-
-            border: 1px solid #1e6b3d;
-            border-radius: 6px;
-
-            font-family: monospace;
-            font-size: 13px;
-        }
-
-        .belajar-content h2 {
-            margin-bottom: 18px;
-
-            font-size: 36px;
-            color: #f0fff5;
-        }
-
-        .belajar-content h2 span {
-            color: #39ff88;
-        }
-
-        .belajar-content p {
-            color: #9caf9f;
-            margin-bottom: 25px;
-        }
+        /* BENEFITS */
 
         .benefits {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
         }
 
-        .benefit {
-            padding: 14px;
-
+        .benefit,
+        .course-card,
+        .video-box {
             background: #0a1710;
-            border: 1px solid #163d26;
-
-            border-radius: 10px;
-
-            color: #c7d8cc;
+            border: 1px solid #173d27;
+            border-radius: 14px;
+            padding: 24px;
+            transition: .3s;
         }
 
-        .benefit span {
-            color: #39ff88;
-            margin-right: 7px;
+        .benefit:hover,
+        .course-card:hover {
+            transform: translateY(-5px);
+            border-color: #39ff88;
+            box-shadow: 0 0 25px rgba(57,255,136,.08);
         }
 
-        /* =========================
-           KATALOG KURSUS
-        ========================== */
-        .catalog {
-            background: #050d08;
-
-            border-top: 1px solid #10291b;
-            border-bottom: 1px solid #10291b;
+        .icon {
+            font-size: 32px;
+            margin-bottom: 12px;
         }
 
-        .course-grid {
+        .benefit h3 {
+            margin-bottom: 8px;
+        }
+
+        .benefit p {
+            color: #91a59a;
+        }
+
+        /* COURSES */
+
+        .courses {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
@@ -470,344 +261,212 @@ $kursus = getKursus();
 
         .course-card {
             position: relative;
-
-            padding: 25px;
-
-            background: #0a1710;
-
-            border: 1px solid #173d27;
-            border-radius: 14px;
-
-            transition: 0.3s;
-
-            overflow: hidden;
         }
 
-        .course-card::before {
-            content: "";
-
-            position: absolute;
-
-            left: 0;
-            top: 0;
-
-            width: 100%;
-            height: 2px;
-
-            background: #39ff88;
-
-            transform: scaleX(0);
-            transform-origin: left;
-
-            transition: 0.3s;
-        }
-
-        .course-card:hover {
-            transform: translateY(-6px);
-
-            border-color: #287a49;
-
-            box-shadow:
-                0 10px 35px rgba(0,0,0,0.4),
-                0 0 20px rgba(57,255,136,0.08);
-        }
-
-        .course-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .course-category {
+        .category {
             display: inline-block;
-
-            margin-bottom: 14px;
-            padding: 5px 10px;
-
             color: #39ff88;
-            background: #061b10;
-
-            border: 1px solid #174c2c;
-            border-radius: 6px;
-
-            font-size: 12px;
+            font-size: 13px;
             font-family: monospace;
+            margin-bottom: 12px;
         }
 
         .course-card h3 {
-            min-height: 55px;
-
+            min-height: 52px;
             margin-bottom: 15px;
-
-            color: #edfdf3;
-            font-size: 20px;
         }
 
         .price {
-            margin-bottom: 15px;
-
             color: #39ff88;
-
-            font-size: 22px;
+            font-size: 23px;
             font-weight: bold;
+            margin-bottom: 12px;
         }
 
-        .course-info {
-            display: flex;
-            justify-content: space-between;
-
-            margin-bottom: 10px;
-
-            color: #879b8e;
-            font-size: 13px;
+        .participants {
+            color: #91a59a;
+            font-size: 14px;
         }
+
+        /* STATUS */
+
+        .status {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .status-available {
+            color: #39ff88;
+            background: #0c2b18;
+        }
+
+        .status-full {
+            color: #ff7979;
+            background: #321313;
+        }
+
+        /* PROGRESS */
 
         .progress {
             height: 7px;
-
-            margin-bottom: 14px;
-
-            background: #16251c;
-
-            border-radius: 20px;
+            background: #17231b;
+            border-radius: 10px;
+            margin-top: 12px;
             overflow: hidden;
         }
 
         .progress-bar {
             height: 100%;
-
             background: #39ff88;
-
-            border-radius: 20px;
-
-            box-shadow:
-                0 0 10px rgba(57,255,136,0.5);
+            box-shadow: 0 0 10px rgba(57,255,136,.4);
         }
 
-        .status {
-            display: inline-block;
+        /* VIDEO */
 
-            padding: 5px 10px;
-
-            border-radius: 6px;
-
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .status-available {
-            color: #39ff88;
-            background: #092617;
-            border: 1px solid #185d35;
-        }
-
-        .status-full {
-            color: #ff7373;
-            background: #2a0e0e;
-            border: 1px solid #6d2929;
-        }
-
-        /* =========================
-           VIDEO
-        ========================== */
-        .media {
-            text-align: center;
-        }
-
-        .media video {
-            width: 100%;
+        .video-box {
             max-width: 850px;
-
-            display: block;
             margin: auto;
-
-            border-radius: 15px;
-
-            border: 1px solid #1e6b3d;
-
-            box-shadow:
-                0 0 35px rgba(57,255,136,0.12);
         }
 
-        /* =========================
-           FOOTER
-        ========================== */
-        footer {
-            padding: 35px 20px;
+        video {
+            width: 100%;
+            border-radius: 10px;
+            display: block;
+        }
 
+        /* CONTACT */
+
+        .contact {
+            background: #07110d;
+        }
+
+        .contact-box {
+            max-width: 600px;
+            margin: auto;
+            padding: 35px;
             text-align: center;
+            background: #0a1710;
+            border: 1px solid #173d27;
+            border-radius: 14px;
+            box-shadow: 0 0 25px rgba(57,255,136,.08);
+        }
 
+        .contact-icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        .contact-box h3 {
+            color: #39ff88;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .contact-box p {
+            color: #91a59a;
+            margin-bottom: 22px;
+        }
+
+        /* FOOTER */
+
+        footer {
+            border-top: 1px solid #173d27;
             background: #020807;
-
-            border-top: 1px solid #123d26;
-
-            color: #718277;
+            text-align: center;
+            padding: 25px;
+            color: #72847a;
         }
 
-        footer strong {
+        footer span {
             color: #39ff88;
         }
 
-        .footer-code {
-            margin-bottom: 10px;
+        /* MOBILE */
 
-            color: #39ff88;
+        @media (max-width: 800px) {
 
-            font-family: monospace;
-        }
-
-        /* =========================
-           RESPONSIVE
-        ========================== */
-        @media (max-width: 900px) {
-
-            .navbar {
-                width: 94%;
-            }
-
-            nav {
-                gap: 0;
-            }
-
-            nav a {
-                padding: 8px 9px;
-                font-size: 13px;
-            }
-
-            .hero-container,
-            .belajar {
+            .hero-grid {
                 grid-template-columns: 1fr;
             }
 
-            .hero-container {
-                text-align: center;
+            .benefits,
+            .courses {
+                grid-template-columns: 1fr;
             }
 
-            .hero-content {
-                margin: auto;
-            }
-
-            .hero-buttons {
-                justify-content: center;
-            }
-
-            .hero-image {
-                max-width: 700px;
-                margin: auto;
-            }
-
-            .hero-image img,
-            .belajar-image img {
-                height: 280px;
-            }
-
-            .course-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 600px) {
-
-            .navbar {
+            .nav {
+                padding: 12px 0;
                 flex-direction: column;
-                padding: 15px 0;
-                gap: 10px;
             }
 
-            nav {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .hero {
-                min-height: auto;
-            }
-
-            .hero-container {
-                padding: 55px 0;
-            }
-
-            .hero h1 {
-                font-size: 40px;
-            }
-
-            .hero p {
-                font-size: 15px;
-            }
-
-            .hero-image img,
-            .belajar-image img {
-                height: 220px;
-            }
-
-            .section {
-                padding: 60px 0;
-            }
-
-            .section-title h2,
-            .belajar-content h2 {
-                font-size: 29px;
-            }
-
-            .course-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .benefits {
-                grid-template-columns: 1fr;
-            }
         }
+
     </style>
 </head>
 
 <body>
 
-<!-- =========================
-     HEADER
-========================== -->
 <header>
-    <div class="navbar">
+
+    <div class="container nav">
 
         <a href="index.php" class="logo">
-            KursusKu
+            &lt;Kursus<span>Ku/&gt;</span>
         </a>
 
         <nav>
-            <a href="index.php">Katalog</a>
-            <a href="fee-calculator.php">Kalkulator</a>
-            <a href="server-time.php">Server Time</a>
+
+            <a href="index.php" class="active">
+                Katalog
+            </a>
+
+            <a href="fee-calculator.php">
+                Kalkulator
+            </a>
+
+            <a href="server-time.php">
+                Server Time
+            </a>
+
         </nav>
 
     </div>
+
 </header>
 
 
-<!-- =========================
-     HERO
-========================== -->
+<main>
+
+<!-- HERO -->
+
 <section class="hero">
 
-    <div class="hero-container">
+    <div class="container hero-grid">
 
-        <div class="hero-content">
+        <div>
 
-            <div class="code-badge">
-                &lt; coding /&gt; #BelajarTeknologi
+            <div class="badge">
+                $ coding --start
             </div>
 
             <h1>
-                Belajar Coding,
+                Belajar Coding,<br>
                 <span>Bangun Masa Depan.</span>
             </h1>
 
             <p>
-                Tingkatkan kemampuan programming, teknologi,
-                desain, dan digital bersama KursusKu.
-                Belajar dari dasar hingga siap membuat proyek sendiri.
+                Tingkatkan kemampuan teknologi dengan berbagai kursus
+                praktis di KursusKu. Belajar lebih mudah, terarah,
+                dan sesuai kebutuhan dunia digital.
             </p>
 
-            <div class="hero-buttons">
+            <div class="buttons">
 
-                <a href="#katalog" class="btn btn-primary">
-                    &lt;/&gt; Lihat Kursus
+                <a href="#kursus" class="btn btn-primary">
+                    &gt;_ Lihat Kursus
                 </a>
 
                 <a href="fee-calculator.php" class="btn btn-secondary">
@@ -818,12 +477,11 @@ $kursus = getKursus();
 
         </div>
 
-
         <div class="hero-image">
 
             <img
                 src="assets/images/hero-kursus.png"
-                alt="Belajar Programming"
+                alt="KursusKu"
             >
 
         </div>
@@ -833,151 +491,172 @@ $kursus = getKursus();
 </section>
 
 
-<!-- =========================
-     BELAJAR BERSAMA
-========================== -->
-<section class="section">
+<!-- BENEFITS -->
 
-    <div class="belajar">
+<section>
 
-        <div class="belajar-image">
-
-            <img
-                src="assets/images/kursus-tambahan.png"
-                alt="Belajar Coding"
-            >
-
-        </div>
-
-
-        <div class="belajar-content">
-
-            <span class="tag">
-                // learn_to_code
-            </span>
-
-            <h2>
-                Belajar Bersama
-                <span>KursusKu</span>
-            </h2>
-
-            <p>
-                KursusKu dirancang untuk membantu kamu memahami
-                teknologi dengan cara yang sederhana, praktis,
-                dan mudah dipahami.
-            </p>
-
-            <div class="benefits">
-
-                <div class="benefit">
-                    <span>✓</span>
-                    Materi mudah dipahami
-                </div>
-
-                <div class="benefit">
-                    <span>✓</span>
-                    Praktik langsung
-                </div>
-
-                <div class="benefit">
-                    <span>✓</span>
-                    Materi teknologi terbaru
-                </div>
-
-                <div class="benefit">
-                    <span>✓</span>
-                    Cocok untuk pemula
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =========================
-     KATALOG
-========================== -->
-<section class="catalog" id="katalog">
-
-    <div class="section">
+    <div class="container">
 
         <div class="section-title">
 
-            <div class="terminal">
-                $ kursusku --list-courses
+            <small>// kenapa_kursusku</small>
+
+            <h2>
+                Belajar Bersama KursusKu
+            </h2>
+
+            <p>
+                Dirancang untuk membantu kamu berkembang di dunia teknologi.
+            </p>
+
+        </div>
+
+        <div class="benefits">
+
+            <div class="benefit">
+
+                <div class="icon">
+                    💻
+                </div>
+
+                <h3>
+                    Materi Praktis
+                </h3>
+
+                <p>
+                    Materi mudah dipahami dan dapat langsung dipraktikkan.
+                </p>
+
             </div>
+
+
+            <div class="benefit">
+
+                <div class="icon">
+                    🚀
+                </div>
+
+                <h3>
+                    Skill Masa Kini
+                </h3>
+
+                <p>
+                    Pelajari teknologi yang banyak digunakan di dunia digital.
+                </p>
+
+            </div>
+
+
+            <div class="benefit">
+
+                <div class="icon">
+                    🎯
+                </div>
+
+                <h3>
+                    Belajar Terarah
+                </h3>
+
+                <p>
+                    Susunan kursus membantu proses belajar menjadi lebih terarah.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- KATALOG -->
+
+<section id="kursus">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <small>// available_courses</small>
 
             <h2>
                 Katalog Kursus
             </h2>
 
             <p>
-                Pilih skill yang ingin kamu pelajari dan mulai coding.
+                Pilih kursus yang ingin kamu pelajari.
             </p>
 
         </div>
 
 
-        <div class="course-grid">
+        <div class="courses">
 
             <?php foreach ($kursus as $item): ?>
 
                 <?php
-                    $status = getStatusKursus(
-                        $item['peserta'],
-                        $item['kapasitas']
-                    );
 
-                    $persentase = getPersentaseKapasitas(
-                        $item['peserta'],
-                        $item['kapasitas']
-                    );
+                $status = getStatusKursus(
+                    $item['peserta'],
+                    $item['kapasitas']
+                );
+
+                $persentase = getPersentaseKapasitas(
+                    $item['peserta'],
+                    $item['kapasitas']
+                );
+
                 ?>
 
                 <div class="course-card">
 
-                    <span class="course-category">
-                        <?= htmlspecialchars($item['kategori']); ?>
+                    <span class="category">
+
+                        &lt;<?= htmlspecialchars($item['kategori']); ?>/&gt;
+
                     </span>
 
+
                     <h3>
+
                         <?= htmlspecialchars($item['nama']); ?>
+
                     </h3>
 
+
                     <div class="price">
+
                         <?= formatRupiah($item['harga']); ?>
-                    </div>
-
-                    <div class="course-info">
-
-                        <span>
-                            👨‍💻
-                            <?= $item['peserta']; ?>
-                            peserta
-                        </span>
-
-                        <span>
-                            <?= $item['kapasitas']; ?>
-                            kapasitas
-                        </span>
 
                     </div>
+
+
+                    <div class="participants">
+
+                        👥
+                        <?= $item['peserta']; ?>
+                        /
+                        <?= $item['kapasitas']; ?>
+                        peserta
+
+                    </div>
+
 
                     <div class="progress">
 
                         <div
                             class="progress-bar"
-                            style="width: <?= min($persentase, 100); ?>%;"
-                        ></div>
+                            style="width: <?= min($persentase, 100); ?>%;">
+                        </div>
 
                     </div>
 
+
                     <span class="status <?= getStatusClass($status); ?>">
+
                         <?= $status; ?>
+
                     </span>
 
                 </div>
@@ -991,62 +670,108 @@ $kursus = getKursus();
 </section>
 
 
-<!-- =========================
-     VIDEO
-========================== -->
-<section class="section">
+<!-- VIDEO -->
 
-    <div class="section-title">
+<section>
 
-        <div class="terminal">
-            $ kursusku --watch-intro
+    <div class="container">
+
+        <div class="section-title">
+
+            <small>// intro_video</small>
+
+            <h2>
+                Kenalan dengan KursusKu
+            </h2>
+
         </div>
 
-        <h2>
-            Kenalan dengan KursusKu
-        </h2>
 
-        <p>
-            Lihat video pengenalan KursusKu.
-        </p>
+        <div class="video-box">
 
-    </div>
+            <video controls>
 
+                <source
+                    src="assets/video/intro-kursus.mp4"
+                    type="video/mp4"
+                >
 
-    <div class="media">
+                Browser kamu tidak mendukung video.
 
-        <video controls>
+            </video>
 
-            <source
-                src="assets/video/intro-kursus.mp4"
-                type="video/mp4"
-            >
-
-            Browser kamu tidak mendukung video HTML5.
-
-        </video>
+        </div>
 
     </div>
 
 </section>
 
 
-<!-- =========================
-     FOOTER
-========================== -->
-<footer>
+<!-- KONTAK WHATSAPP -->
 
-    <div class="footer-code">
-        &lt;KursusKu /&gt;
+<section class="contact">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <small>// contact</small>
+
+            <h2>
+                Hubungi Kami
+            </h2>
+
+            <p>
+                Ada pertanyaan tentang kursus?
+                Silakan hubungi kami melalui WhatsApp.
+            </p>
+
+        </div>
+
+
+        <div class="contact-box">
+
+            <div class="contact-icon">
+                📱
+            </div>
+
+            <h3>
+                Muhammad Hafiz
+            </h3>
+
+            <p>
+                WhatsApp: 085213315418
+            </p>
+
+            <a
+                href="https://wa.me/6285213315418"
+                target="_blank"
+                class="btn btn-primary"
+            >
+                💬 Hubungi via WhatsApp
+            </a>
+
+        </div>
+
     </div>
 
-    <p>
-        © <?= date('Y'); ?>
-        <strong>KursusKu</strong>.
-        Belajar Teknologi, Bangun Masa Depan.
-    </p>
+</section>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    &lt;Kursus<span>Ku/&gt;</span>
+    —
+    <?= $tagline; ?>
+    ©
+    <?= $tahun; ?>
 
 </footer>
+
 
 </body>
 </html>
