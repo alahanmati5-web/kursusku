@@ -1,4 +1,3 @@
-```php
 <?php
 require_once 'helpers.php';
 
@@ -324,6 +323,27 @@ $kursus = getKursus();
             box-shadow: 0 0 10px rgba(57,255,136,.4);
         }
 
+        /* BUTTON DAFTAR */
+
+        .btn-daftar {
+            display: block;
+            width: 100%;
+            margin-top: 18px;
+            padding: 12px;
+            text-align: center;
+            background: #39ff88;
+            color: #031108;
+            border: 1px solid #39ff88;
+            border-radius: 9px;
+            font-weight: bold;
+            transition: .3s;
+        }
+
+        .btn-daftar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(57,255,136,.3);
+        }
+
         /* VIDEO */
 
         .video-box {
@@ -401,9 +421,7 @@ $kursus = getKursus();
                 padding: 12px 0;
                 flex-direction: column;
             }
-
         }
-
     </style>
 </head>
 
@@ -423,12 +441,20 @@ $kursus = getKursus();
                 Katalog
             </a>
 
+            <a href="registration.php">
+                Registrasi
+            </a>
+
             <a href="fee-calculator.php">
                 Kalkulator
             </a>
 
             <a href="server-time.php">
                 Server Time
+            </a>
+
+            <a href="test-functions.php">
+                Tes Fungsi
             </a>
 
         </nav>
@@ -469,8 +495,8 @@ $kursus = getKursus();
                     &gt;_ Lihat Kursus
                 </a>
 
-                <a href="fee-calculator.php" class="btn btn-secondary">
-                    🧮 Kalkulator
+                <a href="registration.php" class="btn btn-secondary">
+                    📝 Registrasi
                 </a>
 
             </div>
@@ -612,25 +638,16 @@ $kursus = getKursus();
                 <div class="course-card">
 
                     <span class="category">
-
                         &lt;<?= htmlspecialchars($item['kategori']); ?>/&gt;
-
                     </span>
 
-
                     <h3>
-
                         <?= htmlspecialchars($item['nama']); ?>
-
                     </h3>
 
-
                     <div class="price">
-
                         <?= formatRupiah($item['harga']); ?>
-
                     </div>
-
 
                     <div class="participants">
 
@@ -642,7 +659,6 @@ $kursus = getKursus();
 
                     </div>
 
-
                     <div class="progress">
 
                         <div
@@ -652,12 +668,18 @@ $kursus = getKursus();
 
                     </div>
 
-
                     <span class="status <?= getStatusClass($status); ?>">
-
-                        <?= $status; ?>
-
+                        <?= htmlspecialchars($status); ?>
                     </span>
+
+                    <!-- TOMBOL TERHUBUNG KE REGISTRASI -->
+
+                    <a
+                        href="registration.php?kursus=<?= urlencode($item['nama']); ?>"
+                        class="btn-daftar"
+                    >
+                        📝 Daftar Sekarang
+                    </a>
 
                 </div>
 
@@ -685,7 +707,6 @@ $kursus = getKursus();
             </h2>
 
         </div>
-
 
         <div class="video-box">
 
@@ -727,7 +748,6 @@ $kursus = getKursus();
             </p>
 
         </div>
-
 
         <div class="contact-box">
 
@@ -775,4 +795,3 @@ $kursus = getKursus();
 
 </body>
 </html>
-```
