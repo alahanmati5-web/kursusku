@@ -1,3 +1,4 @@
+```php
 <?php
 require_once 'helpers.php';
 
@@ -10,9 +11,11 @@ $kursus = getKursus();
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title><?= $siteName; ?> | Katalog Kursus</title>
 
     <style>
@@ -20,6 +23,10 @@ $kursus = getKursus();
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -40,13 +47,16 @@ $kursus = getKursus();
             margin: auto;
         }
 
+        /* ================= HEADER ================= */
+
         header {
-            background: #020807;
+            background: rgba(2, 8, 7, 0.96);
             border-bottom: 1px solid #174d2d;
             position: sticky;
             top: 0;
-            z-index: 100;
-            box-shadow: 0 0 20px rgba(57,255,136,.08);
+            z-index: 1000;
+            box-shadow: 0 0 25px rgba(57, 255, 136, .08);
+            backdrop-filter: blur(10px);
         }
 
         .nav {
@@ -58,10 +68,10 @@ $kursus = getKursus();
         }
 
         .logo {
-            font-size: 24px;
+            font-size: 25px;
             font-weight: bold;
             color: #39ff88;
-            text-shadow: 0 0 12px rgba(57,255,136,.5);
+            text-shadow: 0 0 12px rgba(57, 255, 136, .5);
         }
 
         .logo span {
@@ -70,36 +80,54 @@ $kursus = getKursus();
 
         nav {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
         }
 
         nav a {
-            padding: 9px 14px;
+            padding: 9px 13px;
             color: #9db2a5;
             border-radius: 8px;
             transition: .3s;
+            font-size: 14px;
         }
 
         nav a:hover,
         nav a.active {
             color: #39ff88;
             background: #0d2116;
-            box-shadow: 0 0 12px rgba(57,255,136,.12);
+            box-shadow: 0 0 12px rgba(57, 255, 136, .12);
         }
 
-        /* HERO */
+        /* ================= HERO ================= */
 
         .hero {
-            padding: 80px 0;
+            padding: 90px 0;
             background:
-                linear-gradient(135deg, rgba(2,8,7,.95), rgba(5,35,19,.9)),
+                radial-gradient(circle at 80% 20%, rgba(57,255,136,.08), transparent 30%),
+                linear-gradient(135deg, rgba(2,8,7,.98), rgba(5,35,19,.94)),
                 repeating-linear-gradient(
                     0deg,
                     transparent,
                     transparent 39px,
                     rgba(57,255,136,.035) 40px
                 );
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border: 1px solid rgba(57,255,136,.08);
+            border-radius: 50%;
+            right: -100px;
+            top: 80px;
+            box-shadow:
+                0 0 0 30px rgba(57,255,136,.02),
+                0 0 0 60px rgba(57,255,136,.015);
         }
 
         .hero-grid {
@@ -107,6 +135,8 @@ $kursus = getKursus();
             grid-template-columns: 1.1fr .9fr;
             gap: 50px;
             align-items: center;
+            position: relative;
+            z-index: 1;
         }
 
         .badge {
@@ -118,12 +148,13 @@ $kursus = getKursus();
             border-radius: 30px;
             font-family: monospace;
             margin-bottom: 20px;
+            box-shadow: 0 0 15px rgba(57,255,136,.08);
         }
 
         .hero h1 {
-            font-size: clamp(38px, 6vw, 64px);
+            font-size: clamp(40px, 6vw, 68px);
             line-height: 1.05;
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
 
         .hero h1 span {
@@ -133,7 +164,7 @@ $kursus = getKursus();
 
         .hero p {
             color: #9db2a5;
-            max-width: 600px;
+            max-width: 620px;
             font-size: 17px;
             margin-bottom: 30px;
         }
@@ -160,7 +191,7 @@ $kursus = getKursus();
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             box-shadow: 0 0 30px rgba(57,255,136,.35);
         }
 
@@ -171,31 +202,72 @@ $kursus = getKursus();
 
         .btn-secondary:hover {
             background: #102619;
+            transform: translateY(-3px);
         }
 
         .hero-image {
-            background: #0a1710;
+            background: linear-gradient(145deg, #0d2116, #07110d);
             border: 1px solid #1c5733;
             padding: 10px;
-            border-radius: 16px;
-            box-shadow: 0 0 35px rgba(57,255,136,.08);
+            border-radius: 18px;
+            box-shadow: 0 0 35px rgba(57,255,136,.10);
+            transition: .4s;
+        }
+
+        .hero-image:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 0 45px rgba(57,255,136,.18);
         }
 
         .hero-image img {
             width: 100%;
             display: block;
-            border-radius: 10px;
+            border-radius: 12px;
         }
 
-        /* SECTION */
+        /* ================= STATS ================= */
+
+        .stats {
+            margin-top: -35px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .stat {
+            background: #0a1710;
+            border: 1px solid #173d27;
+            border-radius: 14px;
+            padding: 22px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,.25);
+        }
+
+        .stat h3 {
+            color: #39ff88;
+            font-size: 28px;
+            margin-bottom: 4px;
+        }
+
+        .stat p {
+            color: #91a59a;
+            font-size: 14px;
+        }
+
+        /* ================= SECTION ================= */
 
         section {
-            padding: 70px 0;
+            padding: 80px 0;
         }
 
         .section-title {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 45px;
         }
 
         .section-title small {
@@ -204,7 +276,7 @@ $kursus = getKursus();
         }
 
         .section-title h2 {
-            font-size: 34px;
+            font-size: 35px;
             margin: 8px 0;
         }
 
@@ -212,7 +284,7 @@ $kursus = getKursus();
             color: #91a59a;
         }
 
-        /* BENEFITS */
+        /* ================= BENEFITS ================= */
 
         .benefits {
             display: grid;
@@ -220,26 +292,23 @@ $kursus = getKursus();
             gap: 20px;
         }
 
-        .benefit,
-        .course-card,
-        .video-box {
-            background: #0a1710;
+        .benefit {
+            background: linear-gradient(145deg, #0a1710, #08130d);
             border: 1px solid #173d27;
             border-radius: 14px;
-            padding: 24px;
+            padding: 28px;
             transition: .3s;
         }
 
-        .benefit:hover,
-        .course-card:hover {
-            transform: translateY(-5px);
+        .benefit:hover {
+            transform: translateY(-6px);
             border-color: #39ff88;
             box-shadow: 0 0 25px rgba(57,255,136,.08);
         }
 
         .icon {
-            font-size: 32px;
-            margin-bottom: 12px;
+            font-size: 35px;
+            margin-bottom: 14px;
         }
 
         .benefit h3 {
@@ -250,16 +319,39 @@ $kursus = getKursus();
             color: #91a59a;
         }
 
-        /* COURSES */
+        /* ================= COURSES ================= */
 
         .courses {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+            gap: 22px;
         }
 
         .course-card {
             position: relative;
+            background: linear-gradient(145deg, #0a1710, #08130d);
+            border: 1px solid #173d27;
+            border-radius: 16px;
+            padding: 25px;
+            transition: .35s;
+            overflow: hidden;
+        }
+
+        .course-card::before {
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: rgba(57,255,136,.06);
+            border-radius: 50%;
+            right: -45px;
+            top: -45px;
+        }
+
+        .course-card:hover {
+            transform: translateY(-7px);
+            border-color: #39ff88;
+            box-shadow: 0 0 30px rgba(57,255,136,.10);
         }
 
         .category {
@@ -273,6 +365,7 @@ $kursus = getKursus();
         .course-card h3 {
             min-height: 52px;
             margin-bottom: 15px;
+            font-size: 20px;
         }
 
         .price {
@@ -321,6 +414,7 @@ $kursus = getKursus();
             height: 100%;
             background: #39ff88;
             box-shadow: 0 0 10px rgba(57,255,136,.4);
+            border-radius: 10px;
         }
 
         /* BUTTON DAFTAR */
@@ -340,15 +434,29 @@ $kursus = getKursus();
         }
 
         .btn-daftar:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             box-shadow: 0 0 20px rgba(57,255,136,.3);
         }
 
-        /* VIDEO */
+        /* ================= VIDEO ================= */
+
+        .video-section {
+            background:
+                linear-gradient(
+                    180deg,
+                    #07110d,
+                    #09180f
+                );
+        }
 
         .video-box {
             max-width: 850px;
             margin: auto;
+            background: #0a1710;
+            border: 1px solid #173d27;
+            border-radius: 16px;
+            padding: 12px;
+            box-shadow: 0 0 30px rgba(57,255,136,.08);
         }
 
         video {
@@ -357,21 +465,21 @@ $kursus = getKursus();
             display: block;
         }
 
-        /* CONTACT */
+        /* ================= CONTACT ================= */
 
         .contact {
             background: #07110d;
         }
 
         .contact-box {
-            max-width: 600px;
+            max-width: 650px;
             margin: auto;
-            padding: 35px;
+            padding: 40px;
             text-align: center;
-            background: #0a1710;
+            background: linear-gradient(145deg, #0a1710, #08130d);
             border: 1px solid #173d27;
-            border-radius: 14px;
-            box-shadow: 0 0 25px rgba(57,255,136,.08);
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(57,255,136,.08);
         }
 
         .contact-icon {
@@ -390,13 +498,13 @@ $kursus = getKursus();
             margin-bottom: 22px;
         }
 
-        /* FOOTER */
+        /* ================= FOOTER ================= */
 
         footer {
             border-top: 1px solid #173d27;
             background: #020807;
             text-align: center;
-            padding: 25px;
+            padding: 28px;
             color: #72847a;
         }
 
@@ -404,9 +512,9 @@ $kursus = getKursus();
             color: #39ff88;
         }
 
-        /* MOBILE */
+        /* ================= MOBILE ================= */
 
-        @media (max-width: 800px) {
+        @media (max-width: 900px) {
 
             .hero-grid {
                 grid-template-columns: 1fr;
@@ -414,18 +522,65 @@ $kursus = getKursus();
 
             .benefits,
             .courses {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .container {
+                width: 92%;
             }
 
             .nav {
-                padding: 12px 0;
+                padding: 14px 0;
                 flex-direction: column;
+            }
+
+            nav {
+                justify-content: center;
+            }
+
+            .hero {
+                padding: 65px 0;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .stats-grid,
+            .benefits,
+            .courses {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                margin-top: 20px;
+            }
+
+            section {
+                padding: 60px 0;
+            }
+
+            .section-title h2 {
+                font-size: 29px;
+            }
+
+            .contact-box {
+                padding: 28px 20px;
             }
         }
     </style>
 </head>
 
 <body>
+
+<!-- ================= HEADER ================= -->
 
 <header>
 
@@ -464,9 +619,9 @@ $kursus = getKursus();
 </header>
 
 
-<main>
+<!-- ================= HERO ================= -->
 
-<!-- HERO -->
+<main>
 
 <section class="hero">
 
@@ -479,7 +634,8 @@ $kursus = getKursus();
             </div>
 
             <h1>
-                Belajar Coding,<br>
+                Belajar Coding,
+                <br>
                 <span>Bangun Masa Depan.</span>
             </h1>
 
@@ -503,11 +659,12 @@ $kursus = getKursus();
 
         </div>
 
+
         <div class="hero-image">
 
             <img
                 src="assets/images/hero-kursus.png"
-                alt="KursusKu"
+                alt="KursusKu - Belajar Teknologi"
             >
 
         </div>
@@ -517,7 +674,33 @@ $kursus = getKursus();
 </section>
 
 
-<!-- BENEFITS -->
+<!-- ================= STATISTIK ================= -->
+
+<section class="stats">
+
+    <div class="container stats-grid">
+
+        <div class="stat">
+            <h3>6+</h3>
+            <p>Pilihan Kursus</p>
+        </div>
+
+        <div class="stat">
+            <h3>100+</h3>
+            <p>Slot Peserta</p>
+        </div>
+
+        <div class="stat">
+            <h3>24/7</h3>
+            <p>Akses Informasi</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= BENEFITS ================= -->
 
 <section>
 
@@ -536,6 +719,7 @@ $kursus = getKursus();
             </p>
 
         </div>
+
 
         <div class="benefits">
 
@@ -596,7 +780,7 @@ $kursus = getKursus();
 </section>
 
 
-<!-- KATALOG -->
+<!-- ================= KATALOG ================= -->
 
 <section id="kursus">
 
@@ -659,6 +843,7 @@ $kursus = getKursus();
 
                     </div>
 
+
                     <div class="progress">
 
                         <div
@@ -668,11 +853,13 @@ $kursus = getKursus();
 
                     </div>
 
+
                     <span class="status <?= getStatusClass($status); ?>">
                         <?= htmlspecialchars($status); ?>
                     </span>
 
-                    <!-- TOMBOL TERHUBUNG KE REGISTRASI -->
+
+                    <!-- TOMBOL REGISTRASI -->
 
                     <a
                         href="registration.php?kursus=<?= urlencode($item['nama']); ?>"
@@ -692,9 +879,9 @@ $kursus = getKursus();
 </section>
 
 
-<!-- VIDEO -->
+<!-- ================= VIDEO ================= -->
 
-<section>
+<section class="video-section">
 
     <div class="container">
 
@@ -706,7 +893,12 @@ $kursus = getKursus();
                 Kenalan dengan KursusKu
             </h2>
 
+            <p>
+                Lihat gambaran singkat tentang KursusKu.
+            </p>
+
         </div>
+
 
         <div class="video-box">
 
@@ -728,7 +920,7 @@ $kursus = getKursus();
 </section>
 
 
-<!-- KONTAK WHATSAPP -->
+<!-- ================= KONTAK ================= -->
 
 <section class="contact">
 
@@ -749,6 +941,7 @@ $kursus = getKursus();
 
         </div>
 
+
         <div class="contact-box">
 
             <div class="contact-icon">
@@ -766,6 +959,7 @@ $kursus = getKursus();
             <a
                 href="https://wa.me/6285213315418"
                 target="_blank"
+                rel="noopener noreferrer"
                 class="btn btn-primary"
             >
                 💬 Hubungi via WhatsApp
@@ -780,18 +974,18 @@ $kursus = getKursus();
 </main>
 
 
-<!-- FOOTER -->
+<!-- ================= FOOTER ================= -->
 
 <footer>
 
     &lt;Kursus<span>Ku/&gt;</span>
     —
     <?= $tagline; ?>
-    ©
-    <?= $tahun; ?>
+    © <?= $tahun; ?>
 
 </footer>
 
 
 </body>
 </html>
+```
