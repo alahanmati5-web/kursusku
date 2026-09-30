@@ -1,4 +1,3 @@
-```php
 <?php
 require_once 'helpers.php';
 
@@ -13,604 +12,1677 @@ $kursus = getKursus();
 <html lang="id">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title><?= $siteName; ?> | Katalog Kursus</title>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title><?= $siteName; ?> | Belajar Teknologi</title>
+
 
     <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
+
 
         html {
             scroll-behavior: smooth;
         }
 
+
         body {
-            font-family: Arial, sans-serif;
-            background: #07110d;
-            color: #eafff1;
+            font-family:
+                Inter,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            background:
+                #030806;
+
+            color: #ecfff4;
+
             line-height: 1.6;
+
+            overflow-x: hidden;
         }
+
+
+        body::before {
+            content: "";
+
+            position: fixed;
+
+            width: 500px;
+            height: 500px;
+
+            top: -200px;
+            left: -200px;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(57,255,136,.08),
+                    transparent 70%
+                );
+
+            pointer-events: none;
+
+            z-index: -1;
+        }
+
+
+        body::after {
+            content: "";
+
+            position: fixed;
+
+            width: 450px;
+            height: 450px;
+
+            right: -180px;
+            bottom: -180px;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(0,255,150,.07),
+                    transparent 70%
+                );
+
+            pointer-events: none;
+
+            z-index: -1;
+        }
+
 
         a {
             color: inherit;
             text-decoration: none;
         }
 
+
         .container {
-            width: 90%;
-            max-width: 1150px;
+            width: min(92%, 1200px);
             margin: auto;
         }
 
-        /* ================= HEADER ================= */
+
+        /* =====================================================
+           SCROLLBAR
+        ===================================================== */
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+
+        ::-webkit-scrollbar-track {
+            background: #020604;
+        }
+
+
+        ::-webkit-scrollbar-thumb {
+            background: #1d8b4c;
+            border-radius: 20px;
+        }
+
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #39ff88;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
 
         header {
-            background: rgba(2, 8, 7, 0.96);
-            border-bottom: 1px solid #174d2d;
             position: sticky;
+
             top: 0;
-            z-index: 1000;
-            box-shadow: 0 0 25px rgba(57, 255, 136, .08);
-            backdrop-filter: blur(10px);
+
+            z-index: 9999;
+
+            background:
+                rgba(3, 10, 7, .82);
+
+            backdrop-filter:
+                blur(18px);
+
+            -webkit-backdrop-filter:
+                blur(18px);
+
+            border-bottom:
+                1px solid rgba(57,255,136,.12);
+
+            box-shadow:
+                0 10px 40px rgba(0,0,0,.25);
         }
+
 
         .nav {
-            min-height: 72px;
+            min-height: 78px;
+
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
-            gap: 20px;
+
+            gap: 25px;
         }
 
+
+        /* LOGO */
+
         .logo {
-            font-size: 25px;
-            font-weight: bold;
+            font-size: 24px;
+
+            font-weight: 800;
+
+            letter-spacing: -1px;
+
             color: #39ff88;
-            text-shadow: 0 0 12px rgba(57, 255, 136, .5);
+
+            text-shadow:
+                0 0 10px rgba(57,255,136,.35);
+
+            white-space: nowrap;
         }
+
 
         .logo span {
             color: #eafff1;
         }
 
+
+        .logo-dot {
+            display: inline-block;
+
+            width: 7px;
+            height: 7px;
+
+            margin-left: 5px;
+
+            border-radius: 50%;
+
+            background: #39ff88;
+
+            box-shadow:
+                0 0 10px #39ff88;
+
+            animation:
+                pulse 1.8s infinite;
+        }
+
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: .35;
+                transform: scale(.7);
+            }
+
+        }
+
+
+        /* NAVIGATION */
+
         nav {
             display: flex;
-            gap: 6px;
+
+            align-items: center;
+
+            justify-content: flex-end;
+
+            gap: 4px;
+
             flex-wrap: wrap;
         }
 
+
         nav a {
-            padding: 9px 13px;
-            color: #9db2a5;
+            position: relative;
+
+            padding: 9px 11px;
+
+            color: #8da397;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
             border-radius: 8px;
-            transition: .3s;
-            font-size: 14px;
+
+            transition: .3s ease;
         }
+
+
+        nav a::after {
+            content: "";
+
+            position: absolute;
+
+            left: 50%;
+            bottom: 3px;
+
+            width: 0;
+            height: 2px;
+
+            background: #39ff88;
+
+            box-shadow:
+                0 0 8px #39ff88;
+
+            transition: .3s;
+
+            transform: translateX(-50%);
+        }
+
 
         nav a:hover,
         nav a.active {
             color: #39ff88;
-            background: #0d2116;
-            box-shadow: 0 0 12px rgba(57, 255, 136, .12);
+
+            background:
+                rgba(57,255,136,.06);
         }
 
-        /* ================= HERO ================= */
+
+        nav a:hover::after,
+        nav a.active::after {
+            width: 45%;
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
 
         .hero {
-            padding: 90px 0;
-            background:
-                radial-gradient(circle at 80% 20%, rgba(57,255,136,.08), transparent 30%),
-                linear-gradient(135deg, rgba(2,8,7,.98), rgba(5,35,19,.94)),
-                repeating-linear-gradient(
-                    0deg,
-                    transparent,
-                    transparent 39px,
-                    rgba(57,255,136,.035) 40px
-                );
+            min-height: 650px;
+
+            display: flex;
+
+            align-items: center;
+
             position: relative;
+
             overflow: hidden;
+
+            padding: 90px 0 100px;
+
+            background:
+                radial-gradient(
+                    circle at 80% 30%,
+                    rgba(57,255,136,.12),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 15% 70%,
+                    rgba(0,255,150,.06),
+                    transparent 25%
+                ),
+                linear-gradient(
+                    135deg,
+                    #020604,
+                    #06140b 50%,
+                    #020604
+                );
         }
+
 
         .hero::before {
             content: "";
+
             position: absolute;
-            width: 300px;
-            height: 300px;
-            border: 1px solid rgba(57,255,136,.08);
-            border-radius: 50%;
-            right: -100px;
-            top: 80px;
-            box-shadow:
-                0 0 0 30px rgba(57,255,136,.02),
-                0 0 0 60px rgba(57,255,136,.015);
+
+            inset: 0;
+
+            background-image:
+                linear-gradient(
+                    rgba(57,255,136,.025) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(57,255,136,.025) 1px,
+                    transparent 1px
+                );
+
+            background-size:
+                50px 50px;
+
+            mask-image:
+                linear-gradient(
+                    to bottom,
+                    black,
+                    transparent
+                );
+
+            pointer-events: none;
         }
+
+
+        .hero::after {
+            content: "";
+
+            position: absolute;
+
+            width: 500px;
+            height: 500px;
+
+            right: -200px;
+            top: 80px;
+
+            border:
+                1px solid rgba(57,255,136,.08);
+
+            border-radius: 50%;
+
+            box-shadow:
+                0 0 0 50px rgba(57,255,136,.02),
+                0 0 0 100px rgba(57,255,136,.015);
+        }
+
 
         .hero-grid {
             display: grid;
-            grid-template-columns: 1.1fr .9fr;
-            gap: 50px;
+
+            grid-template-columns:
+                1.05fr .95fr;
+
+            gap: 70px;
+
             align-items: center;
+
             position: relative;
-            z-index: 1;
+
+            z-index: 2;
         }
+
 
         .badge {
-            display: inline-block;
-            color: #39ff88;
-            border: 1px solid #1d6b3c;
-            background: #0a1b11;
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
             padding: 8px 14px;
-            border-radius: 30px;
+
+            margin-bottom: 22px;
+
+            border:
+                1px solid rgba(57,255,136,.25);
+
+            border-radius: 50px;
+
+            background:
+                rgba(57,255,136,.05);
+
+            color: #39ff88;
+
             font-family: monospace;
-            margin-bottom: 20px;
-            box-shadow: 0 0 15px rgba(57,255,136,.08);
+
+            font-size: 13px;
+
+            box-shadow:
+                inset 0 0 20px rgba(57,255,136,.025),
+                0 0 20px rgba(57,255,136,.04);
         }
 
-        .hero h1 {
-            font-size: clamp(40px, 6vw, 68px);
-            line-height: 1.05;
-            margin-bottom: 22px;
+
+        .badge::before {
+            content: "";
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #39ff88;
+
+            box-shadow:
+                0 0 10px #39ff88;
         }
+
+
+        .hero h1 {
+            font-size:
+                clamp(42px, 6vw, 72px);
+
+            line-height: 1.02;
+
+            letter-spacing: -3px;
+
+            margin-bottom: 24px;
+        }
+
 
         .hero h1 span {
             color: #39ff88;
-            text-shadow: 0 0 20px rgba(57,255,136,.35);
+
+            text-shadow:
+                0 0 25px rgba(57,255,136,.25);
         }
 
+
         .hero p {
-            color: #9db2a5;
             max-width: 620px;
+
+            color: #91a59a;
+
             font-size: 17px;
-            margin-bottom: 30px;
+
+            line-height: 1.8;
+
+            margin-bottom: 32px;
         }
+
+
+        /* BUTTONS */
 
         .buttons {
             display: flex;
+
             gap: 12px;
+
             flex-wrap: wrap;
         }
 
+
         .btn {
-            display: inline-block;
-            padding: 13px 20px;
-            border-radius: 9px;
-            font-weight: bold;
-            border: 1px solid #39ff88;
-            transition: .3s;
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            min-height: 48px;
+
+            padding: 0 20px;
+
+            border-radius: 10px;
+
+            font-weight: 700;
+
+            font-size: 14px;
+
+            transition:
+                .3s ease;
+
+            cursor: pointer;
         }
+
 
         .btn-primary {
-            background: #39ff88;
-            color: #031108;
-            box-shadow: 0 0 20px rgba(57,255,136,.18);
+            color: #021008;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #39ff88,
+                    #20e878
+                );
+
+            border:
+                1px solid #39ff88;
+
+            box-shadow:
+                0 0 20px rgba(57,255,136,.15);
         }
 
+
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0 30px rgba(57,255,136,.35);
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 0 30px rgba(57,255,136,.35);
         }
+
 
         .btn-secondary {
             color: #39ff88;
-            background: #0a1710;
+
+            background:
+                rgba(57,255,136,.04);
+
+            border:
+                1px solid rgba(57,255,136,.3);
         }
+
 
         .btn-secondary:hover {
-            background: #102619;
-            transform: translateY(-3px);
+            background:
+                rgba(57,255,136,.09);
+
+            border-color:
+                #39ff88;
+
+            transform:
+                translateY(-3px);
         }
+
+
+        /* HERO IMAGE */
 
         .hero-image {
-            background: linear-gradient(145deg, #0d2116, #07110d);
-            border: 1px solid #1c5733;
+            position: relative;
+
             padding: 10px;
-            border-radius: 18px;
-            box-shadow: 0 0 35px rgba(57,255,136,.10);
-            transition: .4s;
+
+            border-radius: 24px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(57,255,136,.22),
+                    rgba(57,255,136,.02)
+                );
+
+            border:
+                1px solid rgba(57,255,136,.22);
+
+            box-shadow:
+                0 0 50px rgba(57,255,136,.08),
+                inset 0 0 30px rgba(57,255,136,.025);
+
+            transform:
+                perspective(1000px)
+                rotateY(-2deg);
+
+            transition: .5s;
         }
+
 
         .hero-image:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 0 45px rgba(57,255,136,.18);
+            transform:
+                perspective(1000px)
+                rotateY(0deg)
+                translateY(-6px);
+
+            box-shadow:
+                0 0 70px rgba(57,255,136,.15);
         }
+
 
         .hero-image img {
-            width: 100%;
             display: block;
-            border-radius: 12px;
+
+            width: 100%;
+
+            border-radius: 17px;
+
+            border:
+                1px solid rgba(255,255,255,.05);
         }
 
-        /* ================= STATS ================= */
+
+        /* =====================================================
+           STATS
+        ===================================================== */
 
         .stats {
-            margin-top: -35px;
             position: relative;
-            z-index: 5;
+
+            margin-top: -45px;
+
+            z-index: 10;
         }
+
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 16px;
         }
 
+
         .stat {
-            background: #0a1710;
-            border: 1px solid #173d27;
-            border-radius: 14px;
-            padding: 22px;
+            padding: 24px;
+
             text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,.25);
+
+            background:
+                rgba(7, 20, 12, .78);
+
+            border:
+                1px solid rgba(57,255,136,.12);
+
+            border-radius: 16px;
+
+            backdrop-filter:
+                blur(12px);
+
+            box-shadow:
+                0 15px 40px rgba(0,0,0,.2);
+
+            transition: .3s;
         }
+
+
+        .stat:hover {
+            transform:
+                translateY(-5px);
+
+            border-color:
+                rgba(57,255,136,.3);
+
+            box-shadow:
+                0 0 30px rgba(57,255,136,.06);
+        }
+
 
         .stat h3 {
             color: #39ff88;
-            font-size: 28px;
-            margin-bottom: 4px;
+
+            font-size: 30px;
+
+            line-height: 1;
+
+            margin-bottom: 8px;
+
+            text-shadow:
+                0 0 15px rgba(57,255,136,.2);
         }
+
 
         .stat p {
-            color: #91a59a;
-            font-size: 14px;
+            color: #82968b;
+
+            font-size: 13px;
         }
 
-        /* ================= SECTION ================= */
+
+        /* =====================================================
+           GENERAL SECTION
+        ===================================================== */
 
         section {
-            padding: 80px 0;
+            padding: 95px 0;
         }
 
+
         .section-title {
+            max-width: 720px;
+
+            margin:
+                0 auto 50px;
+
             text-align: center;
-            margin-bottom: 45px;
         }
+
 
         .section-title small {
             color: #39ff88;
+
             font-family: monospace;
+
+            font-size: 12px;
+
+            letter-spacing: 1px;
         }
+
 
         .section-title h2 {
-            font-size: 35px;
-            margin: 8px 0;
+            margin:
+                10px 0 12px;
+
+            font-size:
+                clamp(28px, 4vw, 40px);
+
+            letter-spacing:
+                -1.5px;
         }
+
 
         .section-title p {
-            color: #91a59a;
+            color: #81948a;
+
+            font-size: 15px;
         }
 
-        /* ================= BENEFITS ================= */
+
+        /* =====================================================
+           BENEFITS
+        ===================================================== */
 
         .benefits {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
             gap: 20px;
         }
 
+
         .benefit {
-            background: linear-gradient(145deg, #0a1710, #08130d);
-            border: 1px solid #173d27;
-            border-radius: 14px;
-            padding: 28px;
-            transition: .3s;
+            position: relative;
+
+            padding: 30px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(10,24,15,.92),
+                    rgba(4,12,8,.92)
+                );
+
+            border:
+                1px solid rgba(57,255,136,.11);
+
+            border-radius: 18px;
+
+            overflow: hidden;
+
+            transition: .35s;
         }
+
+
+        .benefit::before {
+            content: "";
+
+            position: absolute;
+
+            width: 120px;
+            height: 120px;
+
+            right: -60px;
+            top: -60px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(57,255,136,.05);
+        }
+
 
         .benefit:hover {
-            transform: translateY(-6px);
-            border-color: #39ff88;
-            box-shadow: 0 0 25px rgba(57,255,136,.08);
+            transform:
+                translateY(-8px);
+
+            border-color:
+                rgba(57,255,136,.35);
+
+            box-shadow:
+                0 20px 50px rgba(0,0,0,.25),
+                0 0 25px rgba(57,255,136,.05);
         }
+
 
         .icon {
-            font-size: 35px;
-            margin-bottom: 14px;
+            width: 54px;
+            height: 54px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            margin-bottom: 20px;
+
+            border-radius: 14px;
+
+            background:
+                rgba(57,255,136,.07);
+
+            border:
+                1px solid rgba(57,255,136,.15);
+
+            font-size: 26px;
         }
+
 
         .benefit h3 {
-            margin-bottom: 8px;
+            font-size: 19px;
+
+            margin-bottom: 9px;
         }
+
 
         .benefit p {
-            color: #91a59a;
+            color: #84988d;
+
+            font-size: 14px;
+
+            line-height: 1.7;
         }
 
-        /* ================= COURSES ================= */
+
+        /* =====================================================
+           ABOUT
+        ===================================================== */
+
+        .about-section {
+            background:
+                linear-gradient(
+                    180deg,
+                    transparent,
+                    rgba(8,25,15,.45),
+                    transparent
+                );
+        }
+
+
+        .about-box {
+            max-width: 850px;
+
+            margin: auto;
+
+            padding: 45px;
+
+            text-align: center;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(11,30,18,.88),
+                    rgba(4,13,8,.9)
+                );
+
+            border:
+                1px solid rgba(57,255,136,.14);
+
+            border-radius: 22px;
+
+            box-shadow:
+                0 25px 60px rgba(0,0,0,.2);
+        }
+
+
+        .about-icon {
+            width: 70px;
+            height: 70px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            margin:
+                0 auto 20px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(57,255,136,.07);
+
+            border:
+                1px solid rgba(57,255,136,.18);
+
+            font-size: 34px;
+
+            box-shadow:
+                0 0 25px rgba(57,255,136,.05);
+        }
+
+
+        .about-box h3 {
+            color: #39ff88;
+
+            font-size: 25px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .about-box p {
+            color: #879a90;
+
+            font-size: 15px;
+
+            line-height: 1.8;
+        }
+
+
+        /* =====================================================
+           COURSES
+        ===================================================== */
 
         .courses {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
             gap: 22px;
         }
 
+
         .course-card {
             position: relative;
-            background: linear-gradient(145deg, #0a1710, #08130d);
-            border: 1px solid #173d27;
-            border-radius: 16px;
-            padding: 25px;
-            transition: .35s;
+
+            padding: 26px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(10,25,15,.95),
+                    rgba(4,12,8,.95)
+                );
+
+            border:
+                1px solid rgba(57,255,136,.11);
+
+            border-radius: 18px;
+
             overflow: hidden;
+
+            transition: .35s;
         }
+
 
         .course-card::before {
             content: "";
+
             position: absolute;
-            width: 100px;
-            height: 100px;
-            background: rgba(57,255,136,.06);
+
+            width: 180px;
+            height: 180px;
+
+            right: -90px;
+            top: -90px;
+
             border-radius: 50%;
-            right: -45px;
-            top: -45px;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(57,255,136,.08),
+                    transparent 70%
+                );
+
+            transition: .4s;
         }
 
+
         .course-card:hover {
-            transform: translateY(-7px);
-            border-color: #39ff88;
-            box-shadow: 0 0 30px rgba(57,255,136,.10);
+            transform:
+                translateY(-8px);
+
+            border-color:
+                rgba(57,255,136,.35);
+
+            box-shadow:
+                0 25px 60px rgba(0,0,0,.25),
+                0 0 30px rgba(57,255,136,.06);
         }
+
+
+        .course-card:hover::before {
+            transform:
+                scale(1.3);
+        }
+
 
         .category {
             display: inline-block;
+
+            margin-bottom: 14px;
+
+            padding: 5px 9px;
+
             color: #39ff88;
-            font-size: 13px;
+
+            background:
+                rgba(57,255,136,.06);
+
+            border:
+                1px solid rgba(57,255,136,.12);
+
+            border-radius: 6px;
+
             font-family: monospace;
-            margin-bottom: 12px;
+
+            font-size: 11px;
         }
+
 
         .course-card h3 {
             min-height: 52px;
-            margin-bottom: 15px;
-            font-size: 20px;
+
+            font-size: 19px;
+
+            line-height: 1.4;
+
+            margin-bottom: 16px;
         }
+
 
         .price {
             color: #39ff88;
-            font-size: 23px;
-            font-weight: bold;
+
+            font-size: 22px;
+
+            font-weight: 800;
+
             margin-bottom: 12px;
+
+            text-shadow:
+                0 0 12px rgba(57,255,136,.12);
         }
+
 
         .participants {
-            color: #91a59a;
-            font-size: 14px;
+            color: #81948a;
+
+            font-size: 13px;
         }
 
-        /* STATUS */
-
-        .status {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-        }
-
-        .status-available {
-            color: #39ff88;
-            background: #0c2b18;
-        }
-
-        .status-full {
-            color: #ff7979;
-            background: #321313;
-        }
-
-        /* PROGRESS */
 
         .progress {
-            height: 7px;
-            background: #17231b;
-            border-radius: 10px;
-            margin-top: 12px;
+            height: 6px;
+
+            margin-top: 13px;
+
+            background:
+                #122017;
+
+            border-radius: 20px;
+
             overflow: hidden;
         }
 
+
         .progress-bar {
             height: 100%;
-            background: #39ff88;
-            box-shadow: 0 0 10px rgba(57,255,136,.4);
-            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #1bcf68,
+                    #39ff88
+                );
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 0 10px rgba(57,255,136,.45);
         }
 
-        /* BUTTON DAFTAR */
+
+        .status {
+            display: inline-block;
+
+            margin-top: 15px;
+
+            padding: 5px 10px;
+
+            border-radius: 30px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+
+        .status-available {
+            color: #39ff88;
+
+            background:
+                rgba(57,255,136,.07);
+
+            border:
+                1px solid rgba(57,255,136,.13);
+        }
+
+
+        .status-full {
+            color: #ff7979;
+
+            background:
+                rgba(255,70,70,.06);
+
+            border:
+                1px solid rgba(255,70,70,.12);
+        }
+
 
         .btn-daftar {
-            display: block;
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
             width: 100%;
-            margin-top: 18px;
-            padding: 12px;
-            text-align: center;
-            background: #39ff88;
+
+            min-height: 45px;
+
+            margin-top: 20px;
+
             color: #031108;
-            border: 1px solid #39ff88;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #39ff88,
+                    #22e977
+                );
+
             border-radius: 9px;
-            font-weight: bold;
+
+            font-weight: 800;
+
+            font-size: 13px;
+
             transition: .3s;
         }
 
+
         .btn-daftar:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0 20px rgba(57,255,136,.3);
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 0 25px rgba(57,255,136,.25);
         }
 
-        /* ================= VIDEO ================= */
+
+        /* =====================================================
+           FAQ
+        ===================================================== */
+
+        .faq {
+            max-width: 850px;
+
+            margin: auto;
+        }
+
+
+        .faq-item {
+            position: relative;
+
+            padding: 23px 25px;
+
+            margin-bottom: 13px;
+
+            background:
+                rgba(8,22,13,.82);
+
+            border:
+                1px solid rgba(57,255,136,.1);
+
+            border-radius: 14px;
+
+            transition: .3s;
+        }
+
+
+        .faq-item:hover {
+            border-color:
+                rgba(57,255,136,.28);
+
+            transform:
+                translateX(4px);
+        }
+
+
+        .faq-item h3 {
+            color: #dffff0;
+
+            font-size: 16px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .faq-item h3::first-letter {
+            color: #39ff88;
+        }
+
+
+        .faq-item p {
+            color: #81948a;
+
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           VIDEO
+        ===================================================== */
 
         .video-section {
             background:
                 linear-gradient(
                     180deg,
-                    #07110d,
-                    #09180f
+                    transparent,
+                    rgba(6,20,11,.5),
+                    transparent
                 );
         }
 
+
         .video-box {
-            max-width: 850px;
+            max-width: 900px;
+
             margin: auto;
-            background: #0a1710;
-            border: 1px solid #173d27;
-            border-radius: 16px;
-            padding: 12px;
-            box-shadow: 0 0 30px rgba(57,255,136,.08);
+
+            padding: 9px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(57,255,136,.12),
+                    rgba(57,255,136,.02)
+                );
+
+            border:
+                1px solid rgba(57,255,136,.17);
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 25px 60px rgba(0,0,0,.25);
         }
+
 
         video {
-            width: 100%;
-            border-radius: 10px;
             display: block;
+
+            width: 100%;
+
+            border-radius: 14px;
+
+            background: #000;
         }
 
-        /* ================= CONTACT ================= */
+
+        /* =====================================================
+           CONTACT
+        ===================================================== */
 
         .contact {
-            background: #07110d;
+            padding-bottom: 110px;
         }
+
 
         .contact-box {
             max-width: 650px;
+
             margin: auto;
-            padding: 40px;
+
+            padding: 45px 30px;
+
             text-align: center;
-            background: linear-gradient(145deg, #0a1710, #08130d);
-            border: 1px solid #173d27;
-            border-radius: 16px;
-            box-shadow: 0 0 30px rgba(57,255,136,.08);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(10,29,17,.9),
+                    rgba(4,13,8,.94)
+                );
+
+            border:
+                1px solid rgba(57,255,136,.16);
+
+            border-radius: 22px;
+
+            box-shadow:
+                0 25px 70px rgba(0,0,0,.3),
+                0 0 35px rgba(57,255,136,.04);
         }
 
+
         .contact-icon {
-            font-size: 45px;
-            margin-bottom: 15px;
+            width: 72px;
+            height: 72px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            margin:
+                0 auto 18px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(57,255,136,.07);
+
+            border:
+                1px solid rgba(57,255,136,.16);
+
+            font-size: 34px;
         }
+
 
         .contact-box h3 {
             color: #39ff88;
-            font-size: 24px;
+
+            font-size: 25px;
+
             margin-bottom: 8px;
         }
 
+
         .contact-box p {
-            color: #91a59a;
-            margin-bottom: 22px;
+            color: #82958a;
+
+            margin-bottom: 25px;
         }
 
-        /* ================= FOOTER ================= */
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
 
         footer {
-            border-top: 1px solid #173d27;
-            background: #020807;
+            padding: 30px 20px;
+
             text-align: center;
-            padding: 28px;
-            color: #72847a;
+
+            color: #62756a;
+
+            font-size: 13px;
+
+            background:
+                #020604;
+
+            border-top:
+                1px solid rgba(57,255,136,.1);
         }
+
 
         footer span {
             color: #39ff88;
         }
 
-        /* ================= MOBILE ================= */
 
-        @media (max-width: 900px) {
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
 
-            .hero-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .benefits,
-            .courses {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 650px) {
-
-            .container {
-                width: 92%;
-            }
+        @media (max-width: 1050px) {
 
             .nav {
-                padding: 14px 0;
                 flex-direction: column;
+
+                padding: 15px 0;
             }
+
 
             nav {
                 justify-content: center;
             }
 
-            .hero {
-                padding: 65px 0;
+
+            .hero-grid {
+                gap: 40px;
             }
+
+        }
+
+
+        @media (max-width: 900px) {
+
+            .hero-grid {
+                grid-template-columns: 1fr;
+
+                text-align: center;
+            }
+
+
+            .hero p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+
+            .buttons {
+                justify-content: center;
+            }
+
+
+            .hero-image {
+                max-width: 650px;
+
+                width: 100%;
+
+                margin: auto;
+            }
+
+
+            .benefits,
+            .courses {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .container {
+                width: 91%;
+            }
+
+
+            .nav {
+                gap: 12px;
+            }
+
+
+            .logo {
+                font-size: 22px;
+            }
+
+
+            nav {
+                gap: 3px;
+            }
+
+
+            nav a {
+                padding: 7px 8px;
+
+                font-size: 11px;
+            }
+
+
+            .hero {
+                min-height: auto;
+
+                padding:
+                    65px 0 90px;
+            }
+
 
             .hero h1 {
                 font-size: 42px;
+
+                letter-spacing: -2px;
             }
+
 
             .hero p {
                 font-size: 15px;
             }
 
-            .stats-grid,
-            .benefits,
-            .courses {
-                grid-template-columns: 1fr;
-            }
 
             .stats {
                 margin-top: 20px;
             }
 
-            section {
-                padding: 60px 0;
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+
+                gap: 12px;
             }
+
+
+            section {
+                padding: 70px 0;
+            }
+
+
+            .benefits,
+            .courses {
+                grid-template-columns: 1fr;
+            }
+
+
+            .section-title {
+                margin-bottom: 35px;
+            }
+
 
             .section-title h2 {
                 font-size: 29px;
             }
 
+
+            .about-box,
             .contact-box {
-                padding: 28px 20px;
+                padding:
+                    32px 20px;
             }
+
+
+            .btn {
+                width: 100%;
+            }
+
+
+            .buttons {
+                width: 100%;
+            }
+
         }
+
     </style>
+
 </head>
+
 
 <body>
 
-<!-- ================= HEADER ================= -->
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <header>
 
     <div class="container nav">
 
-        <a href="index.php" class="logo">
+
+        <a
+            href="index.php"
+            class="logo"
+        >
+
             &lt;Kursus<span>Ku/&gt;</span>
+
+            <span class="logo-dot"></span>
+
         </a>
+
 
         <nav>
 
-            <a href="index.php" class="active">
+
+            <!-- 1 -->
+
+            <a
+                href="index.php"
+                class="active"
+            >
                 Katalog
             </a>
+
+
+            <!-- 2 -->
+
+            <a href="#kursus">
+                Kursus
+            </a>
+
+
+            <!-- 3 -->
 
             <a href="registration.php">
                 Registrasi
             </a>
 
+
+            <!-- 4 -->
+
             <a href="fee-calculator.php">
                 Kalkulator
             </a>
+
+
+            <!-- 5 -->
 
             <a href="server-time.php">
                 Server Time
             </a>
 
+
+            <!-- 6 -->
+
             <a href="test-functions.php">
                 Tes Fungsi
             </a>
+
+
+            <!-- 7 -->
+
+            <a href="#tentang">
+                Tentang Kami
+            </a>
+
+
+            <!-- 8 -->
+
+            <a href="#faq">
+                FAQ
+            </a>
+
+
+            <!-- 9 -->
+
+            <a href="history.php">
+                Riwayat
+            </a>
+
+
+            <!-- 10 -->
+
+            <a href="#kontak">
+                Kontak
+            </a>
+
 
         </nav>
 
@@ -619,109 +1691,177 @@ $kursus = getKursus();
 </header>
 
 
-<!-- ================= HERO ================= -->
+<!-- =====================================================
+     HERO
+===================================================== -->
 
 <main>
 
+
 <section class="hero">
+
 
     <div class="container hero-grid">
 
+
         <div>
 
+
             <div class="badge">
-                $ coding --start
+                KursusKu Online Learning
             </div>
 
+
             <h1>
-                Belajar Coding,
+
+                Belajar Teknologi,
+
                 <br>
-                <span>Bangun Masa Depan.</span>
+
+                <span>
+                    Bangun Masa Depan.
+                </span>
+
             </h1>
 
+
             <p>
-                Tingkatkan kemampuan teknologi dengan berbagai kursus
-                praktis di KursusKu. Belajar lebih mudah, terarah,
-                dan sesuai kebutuhan dunia digital.
+
+                Tingkatkan kemampuan teknologi melalui
+                pembelajaran yang praktis, modern,
+                dan sesuai dengan kebutuhan dunia digital.
+
             </p>
+
 
             <div class="buttons">
 
-                <a href="#kursus" class="btn btn-primary">
+
+                <a
+                    href="#kursus"
+                    class="btn btn-primary"
+                >
                     &gt;_ Lihat Kursus
                 </a>
 
-                <a href="registration.php" class="btn btn-secondary">
+
+                <a
+                    href="registration.php"
+                    class="btn btn-secondary"
+                >
                     📝 Registrasi
                 </a>
 
+
             </div>
+
 
         </div>
 
 
         <div class="hero-image">
 
+
             <img
                 src="assets/images/hero-kursus.png"
                 alt="KursusKu - Belajar Teknologi"
             >
 
+
         </div>
 
+
     </div>
+
 
 </section>
 
 
-<!-- ================= STATISTIK ================= -->
+<!-- =====================================================
+     STATS
+===================================================== -->
 
 <section class="stats">
 
+
     <div class="container stats-grid">
 
-        <div class="stat">
-            <h3>6+</h3>
-            <p>Pilihan Kursus</p>
-        </div>
 
         <div class="stat">
-            <h3>100+</h3>
-            <p>Slot Peserta</p>
+
+            <h3>
+                6+
+            </h3>
+
+            <p>
+                Pilihan Kursus
+            </p>
+
         </div>
 
+
         <div class="stat">
-            <h3>24/7</h3>
-            <p>Akses Informasi</p>
+
+            <h3>
+                100+
+            </h3>
+
+            <p>
+                Slot Peserta
+            </p>
+
         </div>
+
+
+        <div class="stat">
+
+            <h3>
+                24/7
+            </h3>
+
+            <p>
+                Akses Informasi
+            </p>
+
+        </div>
+
 
     </div>
+
 
 </section>
 
 
-<!-- ================= BENEFITS ================= -->
+<!-- =====================================================
+     BENEFITS
+===================================================== -->
 
 <section>
 
+
     <div class="container">
+
 
         <div class="section-title">
 
-            <small>// kenapa_kursusku</small>
+            <small>
+                // kenapa_kursusku
+            </small>
 
             <h2>
                 Belajar Bersama KursusKu
             </h2>
 
             <p>
-                Dirancang untuk membantu kamu berkembang di dunia teknologi.
+                Dirancang untuk membantu kamu berkembang
+                di dunia teknologi.
             </p>
 
         </div>
 
 
         <div class="benefits">
+
 
             <div class="benefit">
 
@@ -734,7 +1874,8 @@ $kursus = getKursus();
                 </h3>
 
                 <p>
-                    Materi mudah dipahami dan dapat langsung dipraktikkan.
+                    Materi mudah dipahami dan dapat
+                    langsung dipraktikkan.
                 </p>
 
             </div>
@@ -751,7 +1892,8 @@ $kursus = getKursus();
                 </h3>
 
                 <p>
-                    Pelajari teknologi yang banyak digunakan di dunia digital.
+                    Pelajari teknologi yang banyak
+                    digunakan di dunia digital.
                 </p>
 
             </div>
@@ -768,27 +1910,111 @@ $kursus = getKursus();
                 </h3>
 
                 <p>
-                    Susunan kursus membantu proses belajar menjadi lebih terarah.
+                    Susunan kursus membantu proses
+                    belajar menjadi lebih terarah.
                 </p>
 
             </div>
 
+
         </div>
 
+
     </div>
+
 
 </section>
 
 
-<!-- ================= KATALOG ================= -->
+<!-- =====================================================
+     TENTANG KAMI
+===================================================== -->
 
-<section id="kursus">
+<section
+    id="tentang"
+    class="about-section"
+>
+
 
     <div class="container">
 
+
         <div class="section-title">
 
-            <small>// available_courses</small>
+            <small>
+                // about_kursusku
+            </small>
+
+            <h2>
+                Tentang KursusKu
+            </h2>
+
+            <p>
+                Mengenal lebih dekat platform pembelajaran KursusKu.
+            </p>
+
+        </div>
+
+
+        <div class="about-box">
+
+
+            <div class="about-icon">
+                💻
+            </div>
+
+
+            <h3>
+                Belajar Teknologi Lebih Mudah
+            </h3>
+
+
+            <p>
+
+                KursusKu adalah platform pembelajaran teknologi
+                yang menyediakan berbagai pilihan kursus untuk
+                membantu pengguna meningkatkan keterampilan
+                di bidang digital.
+
+            </p>
+
+
+            <br>
+
+
+            <p>
+
+                Kursus yang tersedia meliputi Web Development,
+                Pemrograman, Database, Jaringan Komputer,
+                Desain, dan Artificial Intelligence.
+
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     KATALOG KURSUS
+===================================================== -->
+
+<section id="kursus">
+
+
+    <div class="container">
+
+
+        <div class="section-title">
+
+            <small>
+                // available_courses
+            </small>
 
             <h2>
                 Katalog Kursus
@@ -803,7 +2029,9 @@ $kursus = getKursus();
 
         <div class="courses">
 
+
             <?php foreach ($kursus as $item): ?>
+
 
                 <?php
 
@@ -812,6 +2040,7 @@ $kursus = getKursus();
                     $item['kapasitas']
                 );
 
+
                 $persentase = getPersentaseKapasitas(
                     $item['peserta'],
                     $item['kapasitas']
@@ -819,26 +2048,47 @@ $kursus = getKursus();
 
                 ?>
 
+
                 <div class="course-card">
 
+
                     <span class="category">
-                        &lt;<?= htmlspecialchars($item['kategori']); ?>/&gt;
+
+                        &lt;<?= htmlspecialchars(
+                            $item['kategori']
+                        ); ?>/&gt;
+
                     </span>
 
+
                     <h3>
-                        <?= htmlspecialchars($item['nama']); ?>
+
+                        <?= htmlspecialchars(
+                            $item['nama']
+                        ); ?>
+
                     </h3>
 
+
                     <div class="price">
-                        <?= formatRupiah($item['harga']); ?>
+
+                        <?= formatRupiah(
+                            $item['harga']
+                        ); ?>
+
                     </div>
+
 
                     <div class="participants">
 
                         👥
+
                         <?= $item['peserta']; ?>
+
                         /
+
                         <?= $item['kapasitas']; ?>
+
                         peserta
 
                     </div>
@@ -848,46 +2098,168 @@ $kursus = getKursus();
 
                         <div
                             class="progress-bar"
-                            style="width: <?= min($persentase, 100); ?>%;">
-                        </div>
+                            style="
+                                width:
+                                <?= min(
+                                    $persentase,
+                                    100
+                                ); ?>%;
+                            "
+                        ></div>
 
                     </div>
 
 
-                    <span class="status <?= getStatusClass($status); ?>">
-                        <?= htmlspecialchars($status); ?>
+                    <span
+                        class="status
+                        <?= getStatusClass($status); ?>"
+                    >
+
+                        <?= htmlspecialchars(
+                            $status
+                        ); ?>
+
                     </span>
 
 
-                    <!-- TOMBOL REGISTRASI -->
-
                     <a
-                        href="registration.php?kursus=<?= urlencode($item['nama']); ?>"
+                        href="registration.php?kursus=<?= urlencode(
+                            $item['nama']
+                        ); ?>"
                         class="btn-daftar"
                     >
+
                         📝 Daftar Sekarang
+
                     </a>
+
 
                 </div>
 
+
             <?php endforeach; ?>
+
 
         </div>
 
+
     </div>
+
 
 </section>
 
 
-<!-- ================= VIDEO ================= -->
+<!-- =====================================================
+     FAQ
+===================================================== -->
 
-<section class="video-section">
+<section id="faq">
+
 
     <div class="container">
 
+
         <div class="section-title">
 
-            <small>// intro_video</small>
+            <small>
+                // frequently_asked_questions
+            </small>
+
+            <h2>
+                FAQ
+            </h2>
+
+            <p>
+                Pertanyaan yang sering ditanyakan tentang KursusKu.
+            </p>
+
+        </div>
+
+
+        <div class="faq">
+
+
+            <div class="faq-item">
+
+                <h3>
+                    ❓ Bagaimana cara mendaftar kursus?
+                </h3>
+
+                <p>
+                    Pilih kursus yang diinginkan kemudian klik
+                    tombol "Daftar Sekarang" atau buka menu Registrasi.
+                </p>
+
+            </div>
+
+
+            <div class="faq-item">
+
+                <h3>
+                    ❓ Apakah tersedia diskon?
+                </h3>
+
+                <p>
+                    Ya. Diskon diberikan berdasarkan jenis peserta,
+                    seperti Mahasiswa, Guru, dan Umum.
+                </p>
+
+            </div>
+
+
+            <div class="faq-item">
+
+                <h3>
+                    ❓ Kursus apa saja yang tersedia?
+                </h3>
+
+                <p>
+                    KursusKu menyediakan Web Development,
+                    Pemrograman, Database, Jaringan Komputer,
+                    Desain, dan Artificial Intelligence.
+                </p>
+
+            </div>
+
+
+            <div class="faq-item">
+
+                <h3>
+                    ❓ Bagaimana melihat riwayat pendaftaran?
+                </h3>
+
+                <p>
+                    Buka menu Riwayat pada navigasi untuk
+                    melihat data riwayat pendaftaran.
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     VIDEO
+===================================================== -->
+
+<section class="video-section">
+
+
+    <div class="container">
+
+
+        <div class="section-title">
+
+            <small>
+                // intro_video
+            </small>
 
             <h2>
                 Kenalan dengan KursusKu
@@ -902,33 +2274,49 @@ $kursus = getKursus();
 
         <div class="video-box">
 
+
             <video controls>
+
 
                 <source
                     src="assets/video/intro-kursus.mp4"
                     type="video/mp4"
                 >
 
+
                 Browser kamu tidak mendukung video.
+
 
             </video>
 
+
         </div>
 
+
     </div>
+
 
 </section>
 
 
-<!-- ================= KONTAK ================= -->
+<!-- =====================================================
+     KONTAK
+===================================================== -->
 
-<section class="contact">
+<section
+    class="contact"
+    id="kontak"
+>
+
 
     <div class="container">
 
+
         <div class="section-title">
 
-            <small>// contact</small>
+            <small>
+                // contact
+            </small>
 
             <h2>
                 Hubungi Kami
@@ -944,17 +2332,21 @@ $kursus = getKursus();
 
         <div class="contact-box">
 
+
             <div class="contact-icon">
                 📱
             </div>
+
 
             <h3>
                 Muhammad Hafiz
             </h3>
 
+
             <p>
                 WhatsApp: 085213315418
             </p>
+
 
             <a
                 href="https://wa.me/6285213315418"
@@ -962,30 +2354,43 @@ $kursus = getKursus();
                 rel="noopener noreferrer"
                 class="btn btn-primary"
             >
+
                 💬 Hubungi via WhatsApp
+
             </a>
+
 
         </div>
 
+
     </div>
 
+
 </section>
+
 
 </main>
 
 
-<!-- ================= FOOTER ================= -->
+<!-- =====================================================
+     FOOTER
+===================================================== -->
 
 <footer>
 
     &lt;Kursus<span>Ku/&gt;</span>
-    —
+
+    &nbsp;—&nbsp;
+
     <?= $tagline; ?>
+
+    &nbsp;•&nbsp;
+
     © <?= $tahun; ?>
 
 </footer>
 
 
 </body>
+
 </html>
-```
