@@ -1,0 +1,22 @@
+[
+    {
+        "nomor": "KRS-20261014-D3E586",
+        "tanggal": "2026-10-14 08:05:11",
+        "nama": "muhammad hafiz",
+        "email": "alahanmati@gmail.com",
+        "hp": "8848752379752398",
+        "prodi": "Ptik",
+        "kursus": "Web Development",
+        "jenis_peserta": "Umum",
+        "metode": "Offline",
+        "label_metode": "Belajar Tatap Muka",
+        "minat": [
+            "Pemrograman"
+        ],
+        "catatan": "rrr",
+        "harga": 500000,
+        "diskon_persen": 0,
+        "potongan": 0,
+        "total": 500000
+    }
+]

@@ -1,1199 +1,491 @@
-<?php
 
+<?php
+require_once 'helpers.php';
+require_once 'data.php';
+
+$siteName = "KursusKu";
+$tahun = date("Y");
+
+$kursus = getKursus();
 $kursusDipilih = $_GET['kursus'] ?? '';
 
-$hasilRegistrasi = false;
-$nomorPendaftaran = '';
-
-
-// ======================================================
-// DATA KURSUS DAN HARGA
-// ======================================================
-
-$hargaKursus = [
-
-    'Web Development' => 350000,
-
-    'PHP & MySQL' => 450000,
-
-    'Digital Marketing' => 400000,
-
-    'Data Analysis' => 500000,
-
-    'JavaScript Modern' => 425000,
-
-    'Artificial Intelligence' => 850000
-
-];
-
-
-// ======================================================
-// DISKON BERDASARKAN PARTICIPANT TYPE
-// ======================================================
-
 $diskonPeserta = [
-
     'Mahasiswa' => 20,
-
     'Guru' => 15,
-
-    'Umum' => 5
-
+    'Umum' => 0
 ];
 
+$minatOptions = $interestOptions ?? [
+    'Pemrograman',
+    'Web Development',
+    'Database',
+    'Jaringan',
+    'Desain',
+    'Data'
+];
 
-// ======================================================
-// NILAI AWAL
-// ======================================================
+function e($value) {
+    return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+}
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registrasi - <?= e($siteName) ?></title>
 
-$harga = 0;
-
-$persenDiskon = 0;
-
-$jumlahDiskon = 0;
-
-$totalBayar = 0;
-
-
-// ======================================================
-// PROSES FORM
-// ======================================================
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-
-    // ==================================================
-    // DATA FORM
-    // ==================================================
-
-    $nama = htmlspecialchars(
-        $_POST['nama'] ?? '',
-        ENT_QUOTES,
-        'UTF-8'
-    );
-
-    $email = htmlspecialchars(
-        $_POST['email'] ?? '',
-        ENT_QUOTES,
-        'UTF-8'
-    );
-
-    $no_hp = htmlspecialchars(
-        $_POST['no_hp'] ?? '',
-        ENT_QUOTES,
-        'UTF-8'
-    );
-
-    $prodi = htmlspecialchars(
-        $_POST['prodi'] ?? '',
-        ENT_QUOTES,
-        'UTF-8'
-    );
-
-    $kursus = htmlspecialchars(
-        $_POST['kursus'] ?? '',
-        ENT_QUOTES,
-        'UTF-8'
-    );
-
-    $jenis = htmlspecialchars(
-        $_POST['jenis'] ?? '',
-        ENT_QUOTES,
-        'UTF-8'
-    );
-
-
-    // ==================================================
-    // INTEREST / MINAT
-    // ==================================================
-
-    $minatArray = $_POST['minat'] ?? [];
-
-
-    if (!is_array($minatArray)) {
-
-        $minatArray = [];
-
-    }
-
-
-    $minatArray = array_map(
-        function ($item) {
-
-            return htmlspecialchars(
-                $item,
-                ENT_QUOTES,
-                'UTF-8'
-            );
-
-        },
-        $minatArray
-    );
-
-
-    $minat = implode(
-        ', ',
-        $minatArray
-    );
-
-
-    // ==================================================
-    // CATATAN
-    // ==================================================
-
-    $catatan = htmlspecialchars(
-        $_POST['catatan'] ?? '',
-        ENT_QUOTES,
-        'UTF-8'
-    );
-
-
-    // ==================================================
-    // HARGA KURSUS
-    // ==================================================
-
-    if (isset($hargaKursus[$kursus])) {
-
-        $harga = $hargaKursus[$kursus];
-
-    }
-
-
-    // ==================================================
-    // DISKON PARTICIPANT TYPE
-    // ==================================================
-
-    if (isset($diskonPeserta[$jenis])) {
-
-        $persenDiskon = $diskonPeserta[$jenis];
-
-    }
-
-
-    // ==================================================
-    // JUMLAH DISKON
-    // ==================================================
-
-    $jumlahDiskon =
-        $harga * $persenDiskon / 100;
-
-
-    // ==================================================
-    // TOTAL BAYAR
-    // ==================================================
-
-    $totalBayar =
-        $harga - $jumlahDiskon;
-
-
-    // ==================================================
-    // NOMOR PENDAFTARAN
-    // ==================================================
-
-    $nomorPendaftaran =
-        'KRS-' .
-        date('Y') .
-        '-' .
-        rand(100, 999);
-
-
-    $hasilRegistrasi = true;
-
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-?>
-
-
-<!DOCTYPE html>
-
-<html lang="id">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-
-        <?= $hasilRegistrasi
-            ? 'Hasil Registrasi'
-            : 'Registrasi';
-        ?>
-
-        - KursusKu
-
-    </title>
-
-
-    <style>
-
-        /* ==================================================
-           RESET
-        ================================================== */
-
-        * {
-
-            box-sizing: border-box;
-
-            margin: 0;
-
-            padding: 0;
-
-        }
-
-
-        /* ==================================================
-           BODY
-        ================================================== */
-
-        body {
-
-            font-family: Arial, sans-serif;
-
-            background: #07110d;
-
-            color: #eafff1;
-
-            line-height: 1.6;
-
-            min-height: 100vh;
-
-        }
-
-
-        a {
-
-            color: inherit;
-
-            text-decoration: none;
-
-        }
-
-
-        /* ==================================================
-           CONTAINER
-        ================================================== */
-
-        .container {
-
-            width: 90%;
-
-            max-width: 850px;
-
-            margin: auto;
-
-        }
-
-
-        /* ==================================================
-           HEADER
-        ================================================== */
-
-        header {
-
-            background: #020807;
-
-            border-bottom: 1px solid #174d2d;
-
-            padding: 18px 0;
-
-            box-shadow:
-                0 0 20px
-                rgba(57,255,136,.08);
-
-        }
-
-
-        .header-content {
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-        }
-
-
-        .logo {
-
-            font-size: 25px;
-
-            font-weight: bold;
-
-            color: #39ff88;
-
-            text-shadow:
-                0 0 12px
-                rgba(57,255,136,.5);
-
-        }
-
-
-        .logo span {
-
-            color: #eafff1;
-
-        }
-
-
-        .back {
-
-            padding: 9px 15px;
-
-            border: 1px solid #39ff88;
-
-            border-radius: 8px;
-
-            color: #39ff88;
-
-            transition: .3s;
-
-        }
-
-
-        .back:hover {
-
-            background: #39ff88;
-
-            color: #031108;
-
-        }
-
-
-        /* ==================================================
-           MAIN
-        ================================================== */
-
-        main {
-
-            padding: 60px 0;
-
-        }
-
-
-        .title {
-
-            text-align: center;
-
-            margin-bottom: 35px;
-
-        }
-
-
-        .title small {
-
-            color: #39ff88;
-
-            font-family: monospace;
-
-        }
-
-
-        .title h1 {
-
-            font-size: 36px;
-
-            margin: 8px 0;
-
-        }
-
-
-        .title p {
-
-            color: #91a59a;
-
-        }
-
-
-        /* ==================================================
-           FORM BOX
-        ================================================== */
-
-        .form-box,
-        .result-box {
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #0a1710,
-                    #08130d
-                );
-
-            border: 1px solid #173d27;
-
-            border-radius: 16px;
-
-            padding: 32px;
-
-            box-shadow:
-                0 0 30px
-                rgba(57,255,136,.07);
-
-        }
-
-
-        /* ==================================================
-           FORM GROUP
-        ================================================== */
-
-        .form-group {
-
-            margin-bottom: 20px;
-
-        }
-
-
-        label {
-
-            display: block;
-
-            margin-bottom: 8px;
-
-            font-weight: bold;
-
-        }
-
-
-        /* ==================================================
-           INPUT
-        ================================================== */
-
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        select,
-        textarea {
-
-            width: 100%;
-
-            padding: 13px 15px;
-
-            background: #07110d;
-
-            color: #eafff1;
-
-            border: 1px solid #28583b;
-
-            border-radius: 8px;
-
-            outline: none;
-
-            font-size: 15px;
-
-        }
-
-
-        input:focus,
-        select:focus,
-        textarea:focus {
-
-            border-color: #39ff88;
-
-            box-shadow:
-                0 0 10px
-                rgba(57,255,136,.08);
-
-        }
-
-
-        textarea {
-
-            min-height: 110px;
-
-            resize: vertical;
-
-        }
-
-
-        select option {
-
-            background: #0a1710;
-
-        }
-
-
-        /* ==================================================
-           CHECKBOX
-        ================================================== */
-
-        .checkbox-group {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, 1fr);
-
-            gap: 12px;
-
-            margin-top: 10px;
-
-        }
-
-
-        .checkbox-item {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-            padding: 12px;
-
-            background: #07110d;
-
-            border: 1px solid #28583b;
-
-            border-radius: 8px;
-
-            cursor: pointer;
-
-            color: #eafff1;
-
-            transition: .3s;
-
-        }
-
-
-        .checkbox-item:hover {
-
-            border-color: #39ff88;
-
-            background: #0c2b18;
-
-            box-shadow:
-                0 0 10px
-                rgba(57,255,136,.08);
-
-        }
-
-
-        .checkbox-item input[type="checkbox"] {
-
-            width: 18px;
-
-            height: 18px;
-
-            accent-color: #39ff88;
-
-            cursor: pointer;
-
-            flex-shrink: 0;
-
-        }
-
-
-        /* ==================================================
-           BUTTON
-        ================================================== */
-
-        .btn {
-
-            display: block;
-
-            width: 100%;
-
-            padding: 14px;
-
-            border-radius: 9px;
-
-            border: 1px solid #39ff88;
-
-            font-size: 16px;
-
-            font-weight: bold;
-
-            cursor: pointer;
-
-            text-align: center;
-
-            transition: .3s;
-
-        }
-
-
-        .btn-primary {
-
-            background: #39ff88;
-
-            color: #031108;
-
-        }
-
-
-        .btn-primary:hover {
-
-            transform: translateY(-2px);
-
-            box-shadow:
-                0 0 25px
-                rgba(57,255,136,.3);
-
-        }
-
-
-        .btn-secondary {
-
-            background: transparent;
-
-            color: #39ff88;
-
-            margin-top: 12px;
-
-        }
-
-
-        .btn-secondary:hover {
-
-            background: #0d2116;
-
-        }
-
-
-        /* ==================================================
-           INFO
-        ================================================== */
-
-        .info {
-
-            margin-top: 20px;
-
-            padding: 14px;
-
-            background: #0c2b18;
-
-            border-left:
-                4px solid #39ff88;
-
-            border-radius: 6px;
-
-            color: #b8c9be;
-
-            font-size: 14px;
-
-        }
-
-
-        /* ==================================================
-           SUCCESS
-        ================================================== */
-
-        .success {
-
-            text-align: center;
-
-            margin-bottom: 30px;
-
-        }
-
-
-        .success-icon {
-
-            font-size: 55px;
-
-            margin-bottom: 10px;
-
-        }
-
-
-        .success h2 {
-
-            color: #39ff88;
-
-            margin-bottom: 8px;
-
-        }
-
-
-        .success p {
-
-            color: #91a59a;
-
-        }
-
-
-        /* ==================================================
-           NOMOR PENDAFTARAN
-        ================================================== */
-
-        .nomor {
-
-            text-align: center;
-
-            background: #07110d;
-
-            border:
-                1px dashed #39ff88;
-
-            padding: 18px;
-
-            border-radius: 10px;
-
-            margin-bottom: 25px;
-
-        }
-
-
-        .nomor small {
-
-            display: block;
-
-            color: #91a59a;
-
-            margin-bottom: 5px;
-
-        }
-
-
-        .nomor strong {
-
-            color: #39ff88;
-
-            font-size: 25px;
-
-            font-family: monospace;
-
-        }
-
-
-        /* ==================================================
-           RINGKASAN
-        ================================================== */
-
-        .summary-title {
-
-            margin-bottom: 15px;
-
-        }
-
-
-        .summary-title h3 {
-
-            color: #39ff88;
-
-            font-size: 22px;
-
-            margin-bottom: 5px;
-
-        }
-
-
-        .summary-title p {
-
-            color: #91a59a;
-
-            font-size: 14px;
-
-        }
-
-
-        .summary-box {
-
-            background: #07110d;
-
-            border: 1px solid #28583b;
-
-            border-radius: 12px;
-
-            padding: 20px;
-
-        }
-
-
-        .summary-section {
-
-            margin-bottom: 25px;
-
-        }
-
-
-        .summary-section:last-child {
-
-            margin-bottom: 0;
-
-        }
-
-
-        .section-title {
-
-            color: #39ff88;
-
-            font-size: 17px;
-
-            font-weight: bold;
-
-            padding-bottom: 10px;
-
-            margin-bottom: 5px;
-
-            border-bottom:
-                1px solid #173d27;
-
-        }
-
-
-        /* ==================================================
-           DATA ROW
-        ================================================== */
-
-        .data-row {
-
-            display: grid;
-
-            grid-template-columns:
-                180px 1fr;
-
-            gap: 20px;
-
-            padding: 13px 0;
-
-            border-bottom:
-                1px solid #173d27;
-
-        }
-
-
-        .data-row:last-child {
-
-            border-bottom: none;
-
-        }
-
-
-        .data-label {
-
-            color: #91a59a;
-
-        }
-
-
-        .data-value {
-
-            font-weight: bold;
-
-            word-break: break-word;
-
-        }
-
-
-        /* ==================================================
-           HARGA
-        ================================================== */
-
-        .price-box {
-
-            margin-top: 20px;
-
-            padding: 20px;
-
-            background: #081a10;
-
-            border:
-                1px solid #28583b;
-
-            border-radius: 12px;
-
-        }
-
-
-        .price-row {
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            padding: 10px 0;
-
-            border-bottom:
-                1px solid #173d27;
-
-        }
-
-
-        .price-row:last-child {
-
-            border-bottom: none;
-
-        }
-
-
-        .price-label {
-
-            color: #91a59a;
-
-        }
-
-
-        .price-value {
-
-            font-weight: bold;
-
-        }
-
-
-        .discount-value {
-
-            color: #39ff88;
-
-        }
-
-
-        /* ==================================================
-           TOTAL BAYAR
-        ================================================== */
-
-        .total-row {
-
-            margin-top: 15px;
-
-            padding: 22px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #0c2b18,
-                    #071a10
-                );
-
-            border:
-                1px solid #39ff88;
-
-            border-radius: 12px;
-
-            text-align: center;
-
-            box-shadow:
-                0 0 20px
-                rgba(57,255,136,.08);
-
-        }
-
-
-        .total-row small {
-
-            display: block;
-
-            color: #91a59a;
-
-            margin-bottom: 5px;
-
-        }
-
-
-        .total-row strong {
-
-            display: block;
-
-            color: #39ff88;
-
-            font-size: 30px;
-
-        }
-
-
-        /* ==================================================
-           FOOTER
-        ================================================== */
-
-        footer {
-
-            text-align: center;
-
-            border-top:
-                1px solid #173d27;
-
-            background: #020807;
-
-            padding: 25px;
-
-            color: #72847a;
-
-            margin-top: 30px;
-
-        }
-
-
-        footer span {
-
-            color: #39ff88;
-
-        }
-
-
-        /* ==================================================
-           MOBILE
-        ================================================== */
-
-        @media (max-width: 600px) {
-
-            .header-content {
-
-                flex-direction: column;
-
-                gap: 15px;
-
-            }
-
-
-            main {
-
-                padding: 40px 0;
-
-            }
-
-
-            .title h1 {
-
-                font-size: 29px;
-
-            }
-
-
-            .form-box,
-            .result-box {
-
-                padding: 22px;
-
-            }
-
-
-            .checkbox-group {
-
-                grid-template-columns: 1fr;
-
-            }
-
-
-            .data-row {
-
-                grid-template-columns:
-                    1fr;
-
-                gap: 3px;
-
-            }
-
-
-            .price-row {
-
-                flex-direction: column;
-
-                align-items: flex-start;
-
-                gap: 4px;
-
-            }
-
-
-            .nomor strong {
-
-                font-size: 20px;
-
-            }
-
-
-            .total-row strong {
-
-                font-size: 24px;
-
-            }
-
-        }
-
-    </style>
-
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(circle at 20% 10%, rgba(57,255,136,.08), transparent 30%),
+        radial-gradient(circle at 80% 30%, rgba(57,255,136,.05), transparent 30%),
+        #030806;
+    color: #fff;
+    min-height: 100vh;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(3,10,7,.88);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(57,255,136,.18);
+    box-shadow: 0 8px 30px rgba(0,0,0,.35);
+}
+
+.navbar {
+    max-width: 1450px;
+    min-height: 72px;
+    margin: auto;
+    padding: 14px 4%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #39ff88;
+    font-size: 23px;
+    font-weight: bold;
+    text-decoration: none;
+    white-space: nowrap;
+    text-shadow: 0 0 15px rgba(57,255,136,.45);
+}
+
+.logo-dot {
+    width: 8px;
+    height: 8px;
+    background: #39ff88;
+    border-radius: 50%;
+    box-shadow: 0 0 12px #39ff88;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .45; transform: scale(.7); }
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.nav-menu a {
+    color: #a9bbb2;
+    text-decoration: none;
+    padding: 9px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    transition: .25s ease;
+}
+
+.nav-menu a:hover,
+.nav-menu a.active {
+    color: #39ff88;
+    background: rgba(57,255,136,.10);
+}
+
+.container {
+    width: 92%;
+    max-width: 900px;
+    margin: 55px auto 70px;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 7px 14px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(57,255,136,.25);
+    border-radius: 999px;
+    color: #39ff88;
+    background: rgba(57,255,136,.06);
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+}
+
+.page-header h1 {
+    font-size: clamp(30px,5vw,46px);
+    margin-bottom: 12px;
+}
+
+.page-header h1 span {
+    color: #39ff88;
+}
+
+.page-header p {
+    color: #9cafa6;
+    line-height: 1.7;
+}
+
+.form-box {
+    background: linear-gradient(145deg,rgba(15,30,23,.94),rgba(6,17,12,.96));
+    border: 1px solid rgba(57,255,136,.18);
+    border-radius: 22px;
+    padding: 38px;
+    box-shadow: 0 25px 70px rgba(0,0,0,.45);
+    position: relative;
+    overflow: hidden;
+}
+
+.section-title {
+    color: #39ff88;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-title::before {
+    content: "";
+    width: 4px;
+    height: 18px;
+    background: #39ff88;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(57,255,136,.5);
+}
+
+.form-group {
+    margin-bottom: 22px;
+}
+
+label {
+    display: block;
+    margin-bottom: 9px;
+    color: #e8f3ed;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 14px 15px;
+    background: rgba(3,12,8,.9);
+    color: #fff;
+    border: 1px solid #234b39;
+    border-radius: 11px;
+    font-size: 14px;
+    outline: none;
+    transition: .25s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #60766c;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #39ff88;
+    box-shadow: 0 0 0 3px rgba(57,255,136,.08);
+}
+
+select {
+    cursor: pointer;
+}
+
+select option {
+    background: #07140e;
+    color: #fff;
+}
+
+textarea {
+    min-height: 110px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.minat {
+    display: grid;
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 12px;
+}
+
+.minat label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(3,12,8,.75);
+    border: 1px solid #234b39;
+    border-radius: 11px;
+    padding: 14px;
+    cursor: pointer;
+    font-weight: normal;
+    color: #b9cbc2;
+    transition: .25s ease;
+    margin: 0;
+}
+
+.minat label:hover {
+    border-color: #39ff88;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.minat input {
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    accent-color: #39ff88;
+    flex-shrink: 0;
+}
+
+.biaya-box {
+    padding: 22px;
+    border: 1px solid rgba(57,255,136,.25);
+    border-radius: 15px;
+    background: rgba(57,255,136,.045);
+}
+
+.biaya-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 11px 0;
+    color: #b9cbc2;
+    border-bottom: 1px solid rgba(57,255,136,.10);
+    font-size: 14px;
+}
+
+.biaya-row strong {
+    color: #fff;
+    text-align: right;
+}
+
+.biaya-row.diskon strong {
+    color: #39ff88;
+}
+
+.biaya-row.total {
+    border-bottom: none;
+    padding-top: 18px;
+    margin-top: 5px;
+}
+
+.biaya-row.total span,
+.biaya-row.total strong {
+    color: #39ff88;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.biaya-keterangan {
+    color: #81988b;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-top: 12px;
+}
+
+.btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 11px;
+    background: #39ff88;
+    color: #031008;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+    box-shadow: 0 0 25px rgba(57,255,136,.14);
+    transition: .25s ease;
+}
+
+.btn:hover {
+    background: #62ffa1;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(57,255,136,.2);
+}
+
+.info-box {
+    margin-top: 22px;
+    padding: 18px 20px;
+    border-radius: 13px;
+    background: rgba(57,255,136,.045);
+    border: 1px solid rgba(57,255,136,.14);
+    color: #8fa79b;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.info-box strong {
+    color: #39ff88;
+}
+
+footer {
+    border-top: 1px solid rgba(57,255,136,.12);
+    text-align: center;
+    padding: 28px 20px;
+    color: #667b71;
+    font-size: 13px;
+}
+
+footer span {
+    color: #39ff88;
+}
+
+@media (max-width: 1050px) {
+    .navbar {
+        flex-direction: column;
+        padding: 18px 4%;
+    }
+
+    .nav-menu {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 650px) {
+    .container {
+        width: 94%;
+        margin-top: 35px;
+    }
+
+    .form-box {
+        padding: 24px 20px;
+        border-radius: 17px;
+    }
+
+    .minat {
+        grid-template-columns: 1fr;
+    }
+
+    .page-header h1 {
+        font-size: 30px;
+    }
+
+    .nav-menu a {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .biaya-box {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 430px) {
+    .logo {
+        font-size: 20px;
+    }
+
+    .nav-menu {
+        gap: 2px;
+    }
+
+    .nav-menu a {
+        font-size: 11px;
+        padding: 7px 6px;
+    }
+
+    .form-box {
+        padding: 20px 16px;
+    }
+
+    .biaya-row {
+        font-size: 13px;
+    }
+}
+</style>
 </head>
-
 
 <body>
 
-
-<!-- ======================================================
-     HEADER
-====================================================== -->
-
 <header>
-
-    <div class="container header-content">
-
-        <a
-            href="index.php"
-            class="logo"
-        >
-
-            &lt;Kursus<span>Ku/&gt;</span>
-
+    <div class="navbar">
+        <a href="index.php" class="logo">
+            &lt;KursusKu/&gt;
+            <span class="logo-dot"></span>
         </a>
 
-
-        <a
-            href="index.php"
-            class="back"
-        >
-
-            ← Kembali ke Katalog
-
-        </a>
-
+        <nav class="nav-menu">
+            <a href="index.php">Katalog</a>
+            <a href="index.php#kursus">Kursus</a>
+            <a href="registration.php" class="active">Registrasi</a>
+            <a href="fee-calculator.php">Kalkulator</a>
+            <a href="server-time.php">Server Time</a>
+            <a href="test-functions.php">Tes Fungsi</a>
+            <a href="index.php#tentang">Tentang Kami</a>
+            <a href="index.php#faq">FAQ</a>
+            <a href="history.php">Riwayat</a>
+            <a href="index.php#kontak">Kontak</a>
+        </nav>
     </div>
-
 </header>
 
+<main class="container">
 
-<!-- ======================================================
-     MAIN
-====================================================== -->
+    <div class="page-header">
+        <div class="badge">REGISTRATION SYSTEM</div>
 
-<main>
-
-<div class="container">
-
-
-<?php if (!$hasilRegistrasi): ?>
-
-
-    <!-- ==================================================
-         FORM REGISTRASI
-    ================================================== -->
-
-    <div class="title">
-
-        <small>
-            // registration_form
-        </small>
-
-        <h1>
-            Form Registrasi Kursus
-        </h1>
+        <h1>Form <span>Registrasi Kursus</span></h1>
 
         <p>
-            Isi data dengan benar untuk melakukan pendaftaran.
+            Lengkapi data berikut untuk mendaftar
+            dan mulai belajar bersama KursusKu.
         </p>
-
     </div>
-
 
     <div class="form-box">
 
+        <div class="section-title">Data Pendaftaran</div>
 
-        <form method="POST">
-
-
-            <!-- NAMA -->
+        <form action="process.php" method="POST" id="formRegistrasi">
 
             <div class="form-group">
-
-                <label for="nama">
-                    Nama Lengkap
-                </label>
-
+                <label for="nama">Nama Lengkap</label>
                 <input
                     type="text"
                     id="nama"
@@ -1201,18 +493,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     placeholder="Masukkan nama lengkap"
                     required
                 >
-
             </div>
 
-
-            <!-- EMAIL -->
-
             <div class="form-group">
-
-                <label for="email">
-                    Email
-                </label>
-
+                <label for="email">Email</label>
                 <input
                     type="email"
                     id="email"
@@ -1220,730 +504,198 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     placeholder="contoh@email.com"
                     required
                 >
-
             </div>
 
-
-            <!-- NO HP -->
-
             <div class="form-group">
-
-                <label for="no_hp">
-                    No. HP / WhatsApp
-                </label>
-
+                <label for="hp">No. HP / WhatsApp</label>
                 <input
                     type="tel"
-                    id="no_hp"
-                    name="no_hp"
+                    id="hp"
+                    name="hp"
                     placeholder="08xxxxxxxxxx"
-                    pattern="[0-9]{10,13}"
-                    maxlength="13"
-                    inputmode="numeric"
                     required
                 >
-
             </div>
 
-
-            <!-- PRODI -->
-
             <div class="form-group">
-
-                <label for="prodi">
-                    Program Studi / Bidang
-                </label>
-
+                <label for="prodi">Program Studi</label>
                 <input
                     type="text"
                     id="prodi"
                     name="prodi"
-                    placeholder="Contoh: PTIK / Guru Informatika"
+                    placeholder="Contoh: Pendidikan Teknik Informatika dan Komputer"
                     required
                 >
-
             </div>
 
-
-            <!-- KURSUS -->
-
             <div class="form-group">
+                <label for="kursus">Kursus yang Dipilih</label>
 
-                <label for="kursus">
-                    Kursus yang Dipilih
-                </label>
+                <select id="kursus" name="kursus" required>
+                    <option value="">-- Pilih Kursus --</option>
 
-
-                <select
-                    id="kursus"
-                    name="kursus"
-                    required
-                >
-
-                    <option value="">
-                        -- Pilih Kursus --
-                    </option>
-
-
-                    <?php foreach (
-                        $hargaKursus
-                        as $namaKursus => $hargaKursusItem
-                    ): ?>
-
+                    <?php foreach ($kursus as $item): ?>
                         <option
-                            value="<?= htmlspecialchars(
-                                $namaKursus,
-                                ENT_QUOTES,
-                                'UTF-8'
-                            ); ?>"
-
-                            <?= $kursusDipilih == $namaKursus
-                                ? 'selected'
-                                : ''; ?>
+                            value="<?= e($item['nama']) ?>"
+                            data-harga="<?= (int)($item['harga'] ?? 0) ?>"
+                            <?= ($kursusDipilih === $item['nama']) ? 'selected' : '' ?>
                         >
-
-                            <?= htmlspecialchars(
-                                $namaKursus,
-                                ENT_QUOTES,
-                                'UTF-8'
-                            ); ?>
-
-                            -
-
-                            Rp <?= number_format(
-                                $hargaKursusItem,
-                                0,
-                                ',',
-                                '.'
-                            ); ?>
-
+                            <?= e($item['nama']) ?>
+                            — Rp<?= number_format((int)($item['harga'] ?? 0), 0, ',', '.') ?>
                         </option>
-
                     <?php endforeach; ?>
-
                 </select>
-
             </div>
 
-
-            <!-- PARTICIPANT TYPE -->
-
             <div class="form-group">
+                <label for="jenis_peserta">Jenis Peserta</label>
 
-                <label for="jenis">
-                    Participant Type / Jenis Peserta
-                </label>
-
-
-                <select
-                    id="jenis"
-                    name="jenis"
-                    required
-                >
-
-                    <option value="">
-                        -- Pilih Jenis Peserta --
-                    </option>
-
-
-                    <option value="Mahasiswa">
-                        👨‍🎓 Mahasiswa - Diskon 20%
-                    </option>
-
-
-                    <option value="Guru">
-                        👨‍🏫 Guru - Diskon 15%
-                    </option>
-
-
-                    <option value="Umum">
-                        👤 Umum - Diskon 5%
-                    </option>
-
+                <select id="jenis_peserta" name="jenis_peserta" required>
+                    <option value="">-- Pilih Jenis Peserta --</option>
+                    <option value="Mahasiswa">Mahasiswa — Diskon 20%</option>
+                    <option value="Guru">Guru — Diskon 15%</option>
+                    <option value="Umum">Umum — Diskon 0%</option>
                 </select>
-
             </div>
 
-
-            <!-- INTEREST -->
-
             <div class="form-group">
+                <label>Minat Tambahan (boleh pilih lebih dari satu)</label>
 
-                <label>
-                    Interest / Minat Tambahan
-                </label>
-
-
-                <div class="checkbox-group">
-
-
-                    <label class="checkbox-item">
-
-                        <input
-                            type="checkbox"
-                            name="minat[]"
-                            value="Web Development"
-                        >
-
-                        <span>
-                            Web Development
-                        </span>
-
-                    </label>
-
-
-                    <label class="checkbox-item">
-
-                        <input
-                            type="checkbox"
-                            name="minat[]"
-                            value="Pemrograman"
-                        >
-
-                        <span>
-                            Pemrograman
-                        </span>
-
-                    </label>
-
-
-                    <label class="checkbox-item">
-
-                        <input
-                            type="checkbox"
-                            name="minat[]"
-                            value="Database"
-                        >
-
-                        <span>
-                            Database
-                        </span>
-
-                    </label>
-
-
-                    <label class="checkbox-item">
-
-                        <input
-                            type="checkbox"
-                            name="minat[]"
-                            value="Jaringan Komputer"
-                        >
-
-                        <span>
-                            Jaringan Komputer
-                        </span>
-
-                    </label>
-
-
-                    <label class="checkbox-item">
-
-                        <input
-                            type="checkbox"
-                            name="minat[]"
-                            value="Desain"
-                        >
-
-                        <span>
-                            Desain
-                        </span>
-
-                    </label>
-
-
-                    <label class="checkbox-item">
-
-                        <input
-                            type="checkbox"
-                            name="minat[]"
-                            value="Artificial Intelligence"
-                        >
-
-                        <span>
-                            Artificial Intelligence
-                        </span>
-
-                    </label>
-
-
+                <div class="minat">
+                    <?php foreach ($minatOptions as $minat): ?>
+                        <label>
+                            <input
+                                type="checkbox"
+                                name="minat[]"
+                                value="<?= e($minat) ?>"
+                            >
+                            <?= e($minat) ?>
+                        </label>
+                    <?php endforeach; ?>
                 </div>
-
             </div>
 
+            <div class="form-group">
+                <label for="metode">Metode Pembelajaran</label>
 
-            <!-- CATATAN -->
+                <select id="metode" name="metode" required>
+                    <option value="">-- Pilih Metode --</option>
+                    <option value="Online">Online</option>
+                    <option value="Offline">Offline</option>
+                    <option value="Hybrid">Hybrid</option>
+                </select>
+            </div>
 
             <div class="form-group">
-
-                <label for="catatan">
-                    Catatan
-                </label>
-
+                <label for="catatan">Catatan</label>
 
                 <textarea
                     id="catatan"
                     name="catatan"
-                    placeholder="Tuliskan pertanyaan atau catatan tambahan..."
+                    placeholder="Tuliskan pertanyaan atau kebutuhan khusus..."
                 ></textarea>
-
             </div>
 
+            <div class="form-group">
+                <label>Ringkasan Biaya Kursus</label>
 
-            <!-- BUTTON -->
+                <div class="biaya-box">
+                    <div class="biaya-row">
+                        <span>Kursus</span>
+                        <strong id="namaKursus">Belum dipilih</strong>
+                    </div>
 
-            <button
-                type="submit"
-                class="btn btn-primary"
-            >
+                    <div class="biaya-row">
+                        <span>Harga Kursus</span>
+                        <strong id="hargaKursus">Rp0</strong>
+                    </div>
 
-                📝 Daftar Sekarang
+                    <div class="biaya-row">
+                        <span>Jenis Peserta</span>
+                        <strong id="namaPeserta">Belum dipilih</strong>
+                    </div>
 
+                    <div class="biaya-row diskon">
+                        <span>Diskon</span>
+                        <strong id="diskonKursus">0% — Rp0</strong>
+                    </div>
+
+                    <div class="biaya-row total">
+                        <span>Total Bayar</span>
+                        <strong id="totalKursus">Rp0</strong>
+                    </div>
+
+                    <p class="biaya-keterangan">
+                        Total biaya diperbarui otomatis berdasarkan kursus
+                        dan jenis peserta yang dipilih.
+                    </p>
+                </div>
+            </div>
+
+            <button type="submit" class="btn">
+                &gt; Daftar Sekarang
             </button>
-
 
         </form>
 
-
-        <!-- INFO -->
-
-        <div class="info">
-
+        <div class="info-box">
             <strong>Info:</strong>
-
-            Pilih Participant Type sesuai status kamu.
-
-            <br><br>
-
-            👨‍🎓 Mahasiswa =
-            <strong>Diskon 20%</strong>
-
-            <br>
-
-            👨‍🏫 Guru =
-            <strong>Diskon 15%</strong>
-
-            <br>
-
-            👤 Umum =
-            <strong>Diskon 5%</strong>
-
-            <br><br>
-
-            Interest / Minat Tambahan boleh memilih
-            lebih dari satu atau tidak memilih sama sekali.
-
+            Pastikan data yang kamu masukkan sudah benar.
+            Diskon akan dihitung kembali di server saat formulir dikirim.
         </div>
-
 
     </div>
-
-
-<?php else: ?>
-
-
-    <!-- ==================================================
-         HASIL REGISTRASI
-    ================================================== -->
-
-    <div class="title">
-
-        <small>
-            // registration_result
-        </small>
-
-        <h1>
-            Hasil Registrasi
-        </h1>
-
-        <p>
-            Data pendaftaran kamu berhasil diproses.
-        </p>
-
-    </div>
-
-
-    <div class="result-box">
-
-
-        <!-- SUCCESS -->
-
-        <div class="success">
-
-            <div class="success-icon">
-                ✅
-            </div>
-
-            <h2>
-                Registrasi Berhasil!
-            </h2>
-
-            <p>
-                Terima kasih telah mendaftar di KursusKu.
-            </p>
-
-        </div>
-
-
-        <!-- NOMOR PENDAFTARAN -->
-
-        <div class="nomor">
-
-            <small>
-                Nomor Pendaftaran
-            </small>
-
-            <strong>
-                <?= $nomorPendaftaran; ?>
-            </strong>
-
-        </div>
-
-
-        <!-- ==================================================
-             RINGKASAN PENDAFTARAN
-        ================================================== -->
-
-        <div class="summary-title">
-
-            <h3>
-                📋 Ringkasan Pendaftaran
-            </h3>
-
-            <p>
-                Berikut adalah detail data dan biaya pendaftaran.
-            </p>
-
-        </div>
-
-
-        <div class="summary-box">
-
-
-            <!-- ==================================================
-                 DATA PESERTA
-            ================================================== -->
-
-            <div class="summary-section">
-
-                <div class="section-title">
-                    👤 Data Peserta
-                </div>
-
-
-                <div class="data-row">
-
-                    <div class="data-label">
-                        Nama Lengkap
-                    </div>
-
-                    <div class="data-value">
-                        <?= $nama; ?>
-                    </div>
-
-                </div>
-
-
-                <div class="data-row">
-
-                    <div class="data-label">
-                        Email
-                    </div>
-
-                    <div class="data-value">
-                        <?= $email; ?>
-                    </div>
-
-                </div>
-
-
-                <div class="data-row">
-
-                    <div class="data-label">
-                        No. HP / WhatsApp
-                    </div>
-
-                    <div class="data-value">
-                        <?= $no_hp; ?>
-                    </div>
-
-                </div>
-
-
-                <div class="data-row">
-
-                    <div class="data-label">
-                        Program Studi / Bidang
-                    </div>
-
-                    <div class="data-value">
-                        <?= $prodi; ?>
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- ==================================================
-                 DETAIL KURSUS
-            ================================================== -->
-
-            <div class="summary-section">
-
-                <div class="section-title">
-                    💻 Detail Kursus
-                </div>
-
-
-                <div class="data-row">
-
-                    <div class="data-label">
-                        Kursus
-                    </div>
-
-                    <div class="data-value">
-                        <?= $kursus; ?>
-                    </div>
-
-                </div>
-
-
-                <div class="data-row">
-
-                    <div class="data-label">
-                        Participant Type
-                    </div>
-
-                    <div class="data-value">
-                        <?= $jenis; ?>
-                    </div>
-
-                </div>
-
-
-                <div class="data-row">
-
-                    <div class="data-label">
-                        Interest / Minat
-                    </div>
-
-                    <div class="data-value">
-
-                        <?php if (!empty($minat)): ?>
-
-                            <?= $minat; ?>
-
-                        <?php else: ?>
-
-                            Tidak ada minat tambahan
-
-                        <?php endif; ?>
-
-                    </div>
-
-                </div>
-
-
-                <div class="data-row">
-
-                    <div class="data-label">
-                        Catatan
-                    </div>
-
-                    <div class="data-value">
-
-                        <?= !empty($catatan)
-                            ? $catatan
-                            : '-'; ?>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- ==================================================
-                 RINGKASAN BIAYA
-            ================================================== -->
-
-            <div class="summary-section">
-
-                <div class="section-title">
-                    💰 Ringkasan Biaya
-                </div>
-
-
-                <div class="price-box">
-
-
-                    <!-- HARGA AWAL -->
-
-                    <div class="price-row">
-
-                        <div class="price-label">
-                            Harga Kursus
-                        </div>
-
-                        <div class="price-value">
-
-                            Rp <?= number_format(
-                                $harga,
-                                0,
-                                ',',
-                                '.'
-                            ); ?>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- PARTICIPANT TYPE -->
-
-                    <div class="price-row">
-
-                        <div class="price-label">
-                            Participant Type
-                        </div>
-
-                        <div class="price-value">
-                            <?= $jenis; ?>
-                        </div>
-
-                    </div>
-
-
-                    <!-- PERSENTASE DISKON -->
-
-                    <div class="price-row">
-
-                        <div class="price-label">
-                            Diskon
-                        </div>
-
-                        <div class="price-value discount-value">
-
-                            <?= $persenDiskon; ?>%
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- NOMINAL DISKON -->
-
-                    <div class="price-row">
-
-                        <div class="price-label">
-                            Jumlah Diskon
-                        </div>
-
-                        <div class="price-value discount-value">
-
-                            - Rp <?= number_format(
-                                $jumlahDiskon,
-                                0,
-                                ',',
-                                '.'
-                            ); ?>
-
-                        </div>
-
-                    </div>
-
-
-                </div>
-
-
-                <!-- TOTAL BAYAR -->
-
-                <div class="total-row">
-
-                    <small>
-                        TOTAL BIAYA YANG HARUS DIBAYAR
-                    </small>
-
-                    <strong>
-
-                        Rp <?= number_format(
-                            $totalBayar,
-                            0,
-                            ',',
-                            '.'
-                        ); ?>
-
-                    </strong>
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-
-        <!-- ==================================================
-             BUTTON
-        ================================================== -->
-
-        <div style="margin-top:25px;">
-
-
-            <a
-                href="registration.php"
-                class="btn btn-secondary"
-            >
-
-                🔄 Daftar Lagi
-
-            </a>
-
-
-            <a
-                href="index.php"
-                class="btn btn-primary"
-                style="margin-top:12px;"
-            >
-
-                🏠 Kembali ke Katalog
-
-            </a>
-
-
-        </div>
-
-
-    </div>
-
-
-<?php endif; ?>
-
-
-</div>
-
 </main>
 
-
-<!-- ======================================================
-     FOOTER
-====================================================== -->
-
 <footer>
-
-    &lt;Kursus<span>Ku/&gt;</span>
-
-    —
-
-    Belajar Teknologi, Bangun Masa Depan
-
-    © <?= date("Y"); ?>
-
+    <span>&lt;KursusKu/&gt;</span>
+    — Belajar Teknologi, Bangun Masa Depan
+    • © <?= e($tahun) ?>
 </footer>
 
+<script>
+const pilihanKursus = document.getElementById('kursus');
+const pilihanPeserta = document.getElementById('jenis_peserta');
+
+const namaKursus = document.getElementById('namaKursus');
+const hargaKursus = document.getElementById('hargaKursus');
+const namaPeserta = document.getElementById('namaPeserta');
+const diskonKursus = document.getElementById('diskonKursus');
+const totalKursus = document.getElementById('totalKursus');
+
+const diskonPersen = {
+    Mahasiswa: 20,
+    Guru: 15,
+    Umum: 0
+};
+
+function rupiah(angka) {
+    return 'Rp' + Number(angka).toLocaleString('id-ID');
+}
+
+function hitungBiaya() {
+    const opsi = pilihanKursus.options[pilihanKursus.selectedIndex];
+
+    const nama = pilihanKursus.value;
+    const harga = Number(opsi?.dataset?.harga || 0);
+    const jenis = pilihanPeserta.value;
+    const persen = diskonPersen[jenis] ?? 0;
+
+    const potongan = Math.round(harga * persen / 100);
+    const total = harga - potongan;
+
+    namaKursus.textContent = nama || 'Belum dipilih';
+    hargaKursus.textContent = rupiah(harga);
+    namaPeserta.textContent = jenis || 'Belum dipilih';
+    diskonKursus.textContent = persen + '% — ' + rupiah(potongan);
+    totalKursus.textContent = rupiah(total);
+}
+
+pilihanKursus.addEventListener('change', hitungBiaya);
+pilihanPeserta.addEventListener('change', hitungBiaya);
+
+hitungBiaya();
+</script>
 
 </body>
-
 </html>
